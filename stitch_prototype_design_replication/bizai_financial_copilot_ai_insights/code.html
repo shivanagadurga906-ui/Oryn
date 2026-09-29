@@ -1,0 +1,716 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BizAI Financial Copilot</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "inverse-surface": "#213145",
+            "on-primary-fixed": "#00201d",
+            "surface-variant": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-tint": "#006a61",
+            "surface-dim": "#cbdbf5",
+            "outline-variant": "#bcc9c6",
+            "on-primary-container": "#f4fffc",
+            "surface-container-highest": "#d3e4fe",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-container-high": "#dce9ff",
+            "on-secondary-container": "#5c647a",
+            "surface": "#f8f9ff",
+            "outline": "#6d7a77",
+            "secondary": "#565e74",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#6ffbbe",
+            "background": "#f8f9ff",
+            "inverse-primary": "#6bd8cb",
+            "tertiary": "#006947",
+            "primary": "#00685f",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-fixed-variant": "#005049",
+            "secondary-container": "#dae2fd",
+            "tertiary-container": "#00855b",
+            "primary-fixed": "#89f5e7",
+            "on-secondary-fixed": "#131b2e",
+            "primary-container": "#008378",
+            "surface-bright": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "on-secondary-fixed-variant": "#3f465c",
+            "on-background": "#0b1c30",
+            "on-tertiary-fixed": "#002113",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-secondary": "#ffffff",
+            "primary-fixed-dim": "#6bd8cb",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3d4947",
+            "on-error-container": "#93000a",
+            "on-surface": "#0b1c30",
+            "sidebar-dark": "#0e1828",
+            "sidebar-active": "#1e293b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.25rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "margin": "2rem",
+            "gutter-mobile": "0.75rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "metric-stat": ["Inter"],
+            "body-lg": ["Inter"],
+            "metric-stat-sm": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+            "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700"}],
+            "metric-stat": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+            "metric-stat-sm": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html {
+        overscroll-behavior: none;
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- BEGIN: Left Persistent Sidebar (260px) -->
+<aside class="fixed inset-y-0 left-0 w-[260px] bg-sidebar-dark z-30 flex flex-col justify-between border-r border-slate-800/80 shadow-sm">
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Logo Branding -->
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary font-headline-md flex items-center justify-center shadow-sm">
+          B
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-surface-container-lowest leading-tight tracking-tight">BizAI</span>
+<span class="font-label-sm text-label-sm text-slate-400 font-normal">Financial copilot</span>
+</div>
+</div>
+<!-- Main Navigation -->
+<nav class="flex flex-col gap-1.5 font-label-md text-label-md" data-active-classes="bg-sidebar-active text-surface-container-lowest font-semibold shadow-sm text-primary-fixed border-l-2 border-primary-fixed" data-purpose="sidebar-navigation">
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="dashboard" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<a aria-current="page" class="flex items-center justify-between px-3.5 py-2.5 rounded-lg transition-colors bg-sidebar-active text-surface-container-lowest font-semibold shadow-sm text-primary-fixed border-l-2 border-primary-fixed" data-path="ai-insights" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+<span class="">AI Insights</span>
+</div>
+<span class="bg-amber-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="financial-analysis" href="#">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+<span class="">Financial Analysis</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="products" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="">Products</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="inventory" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="">Inventory</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="payments" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span class="">Payments</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="cash-flow" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="">Cash Flow</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="ask-bizai" href="#">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+<span class="">Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-space-lg pb-space-lg pt-space-sm flex flex-col gap-space-md border-t border-slate-800/80">
+<div class="flex flex-col gap-1 font-label-md text-label-md text-slate-400">
+<a class="flex items-center gap-space-sm px-3.5 py-2 rounded-lg hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="import-data" href="#">
+<span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+<span class="">Import data</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2 rounded-lg hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="settings" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span class="">Settings</span>
+</a>
+</div>
+<!-- User Profile Card -->
+<div class="flex items-center justify-between pt-space-xs cursor-pointer group">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-xs text-surface-container-lowest">
+            AR
+          </div>
+<div class="flex flex-col">
+<div class="font-label-md text-label-md text-surface-container-lowest font-semibold leading-tight">Arjun Rao</div>
+<div class="font-label-sm text-label-sm text-slate-400">Rao &amp; Co. • Pro</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-slate-300 text-[18px] transition-colors">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- END: Left Persistent Sidebar -->
+<!-- BEGIN: Topbar Header -->
+<header class="fixed top-0 left-[260px] right-0 z-20 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container shadow-xs">
+<div class="h-16 px-space-lg flex items-center justify-between">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 font-label-md text-label-md">
+<span class="text-secondary hover:text-on-surface cursor-pointer transition-colors">Workspace</span>
+<span class="text-outline-variant font-light">/</span>
+<span class="text-on-surface font-semibold tracking-tight">Dashboard</span>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-space-md">
+<!-- Live System Status -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span>
+</span>
+<span class="font-medium">Live sync</span>
+</div>
+<!-- Help Center -->
+<a class="flex items-center gap-1.5 text-secondary hover:text-on-surface font-label-md text-label-md transition-colors px-2 py-1.5 rounded-lg hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="hidden sm:inline">Help centre</span>
+</a>
+<!-- Profile AR Circle -->
+<button aria-label="User menu" class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant text-on-surface font-bold text-xs flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all" type="button">
+          AR
+        </button>
+</div>
+</div>
+</header>
+<!-- END: Topbar Header -->
+<!-- BEGIN: MainContent -->
+<main class="pl-[260px] pt-16 min-h-screen bg-background" data-purpose="main-layout-container">
+<div class="flex flex-col w-full">
+<div class="p-space-lg max-w-[1560px] mx-auto w-full flex flex-col gap-space-lg">
+<!-- Top Header Area & Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Autonomous Intelligence</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">AI Insights</h1>
+<p class="font-body-md text-body-md text-secondary">Real-time financial intelligence and proactive recommendations powered by BizAI engine v4.2</p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors shadow-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Rules Engine</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+<span class="">Re-scan Ledger</span>
+</button>
+</div>
+</div>
+<!-- Executive Takeaway Banner (Signature BizAI Dark Teal Gradient) -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-[#003833] via-[#004e47] to-[#0b2b28] text-on-primary-container p-6 md:p-7 shadow-md">
+<!-- Decorative Analytical Background Ring & Spark Grid -->
+<div class="pointer-events-none absolute right-0 top-0 bottom-0 w-1/2 opacity-15 overflow-hidden flex items-center justify-end">
+<svg class="w-[360px] h-[360px] text-primary-fixed fill-none stroke-current" stroke-width="1.5" viewBox="0 0 400 400">
+<circle cx="200" cy="200" r="160" stroke-dasharray="6 6"></circle>
+<circle cx="200" cy="200" r="120"></circle>
+<circle cx="200" cy="200" r="75" stroke-dasharray="3 3"></circle>
+<path d="M 40 200 H 360 M 200 40 V 360"></path>
+</svg>
+</div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<div class="max-w-3xl flex flex-col gap-2.5">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed/20 text-primary-fixed font-label-sm text-label-sm tracking-wide">
+<span class="material-symbols-outlined text-[14px]">psychology</span>
+              EXECUTIVE SYNTHESIS
+            </span>
+<span class="text-xs text-slate-300 font-label-sm">Updated 14 mins ago • Confidence 94.8%</span>
+</div>
+<p class="font-headline-md text-headline-md text-white font-semibold leading-snug">
+            Profit margin dipped 2.1% due to freight rate surges in June. Immediate renegotiation with 2 suppliers can recover ~₹42,000 monthly.
+          </p>
+<p class="font-body-md text-body-md text-slate-200">
+            BizAI identified an abnormal 34% rate escalation from West-Zone road logistics partners. 3 corrective mitigation plans prepared.
+          </p>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-slate-100 font-label-md text-label-md transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-primary text-[18px]">schema</span>
+<span class="">Run Scenario Simulation</span>
+</button>
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container/60 hover:bg-primary-container text-white font-label-md text-label-md transition-all" type="button">
+<span class="">Download Audit Brief</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Filter Chips Rail -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" id="filter-bar">
+<button class="filter-chip active-filter px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-xs transition-all flex items-center gap-1.5 shrink-0" data-filter="all">
+<span class="">All</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[11px] font-bold">12</span>
+</button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5 shrink-0" data-filter="priority">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="">High Priority</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary text-[11px] font-bold">3</span>
+</button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5 shrink-0" data-filter="cost">
+<span class="">Cost Optimization</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary text-[11px] font-bold">4</span>
+</button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5 shrink-0" data-filter="revenue">
+<span class="">Revenue Opportunities</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary text-[11px] font-bold">3</span>
+</button>
+<button class="filter-chip px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all flex items-center gap-1.5 shrink-0" data-filter="inventory">
+<span class="">Inventory Alerts</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary text-[11px] font-bold">2</span>
+</button>
+</div>
+<!-- Main Asymmetric Grid: 8 cols Insights / 4 cols Impact Rail -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Actionable AI Insight Feed (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- CARD 1: High Priority Coral Alert (Margin Drop) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col gap-4" data-category="priority cost">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">trending_down</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm uppercase font-bold text-error bg-error-container/60 px-2 py-0.5 rounded">High Priority</span>
+<span class="text-secondary font-label-sm text-label-sm">• Flagged 2h ago</span>
+<span class="inline-flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm bg-surface-container-low px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[13px]">tune</span> Model: LedgerAnomaly-v3
+                  </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">
+                  Profit margin dipped 2.1% this month
+                </h2>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary block">Monthly Drag</span>
+<span class="font-metric-stat-sm text-metric-stat-sm text-error font-bold tracking-tight">-₹65,000<span class="text-body-md font-normal text-secondary">/mo</span></span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed pl-0 md:pl-[54px]">
+            Expenses outpaced revenue by 4.1%, driven mainly by Mumbai &amp; Delhi logistics hubs. Fuel surcharge multipliers rose 18% unannounced on June 8. 
+            <strong class="text-on-surface font-semibold">Recommended Action:</strong> Enforce SLA volume rate caps on Tier-1 freight contracts or immediately reroute 35% of shipments to Regional Carrier B.
+          </p>
+<!-- Interactive Visualization Snippet: Trend Bar -->
+<div class="md:ml-[54px] p-3.5 rounded-lg bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-secondary">
+<span class="">Cost driver distribution (Logistics hub overrun)</span>
+<span class="font-semibold text-on-surface">Mumbai Hub (+₹38k) • Delhi Hub (+₹27k)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden flex">
+<div class="bg-error h-full" style="width: 58%;"></div>
+<div class="bg-amber-600 h-full" style="width: 42%;"></div>
+</div>
+</div>
+<!-- Metadata Tag Badges & Call to Actions -->
+<div class="md:ml-[54px] pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Margin Preservation</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Logistics SLA</span>
+<span class="px-2.5 py-1 rounded-md bg-error-container/40 text-error font-label-sm text-label-sm font-semibold">Overrun: +18.4%</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-container text-secondary hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+                Dismiss
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors shadow-xs" type="button">
+<span class="">View expense breakdown</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 2: High Priority Teal/Amber Alert (Stockout Risk) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col gap-4" data-category="priority inventory">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">production_quantity_limits</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm uppercase font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Stockout Imminent</span>
+<span class="text-secondary font-label-sm text-label-sm">• Forecasted 4h ago</span>
+<span class="text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span> 5 Days Supplier Lead Time
+                  </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">ErgoPro Standing Desk v2 inventory running critically low</h2>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary block">Revenue at Risk</span>
+<span class="font-metric-stat-sm text-metric-stat-sm text-on-surface font-bold tracking-tight">₹1.45L</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed pl-0 md:pl-[54px]">
+            Only 18 units remaining in central warehouse. Current velocity is 2.4 units/day with acceleration on corporate bulk orders. Stockout expected in 7-8 calendar days. 
+            <strong class="text-on-surface font-semibold">Recommended Action:</strong> Issue purchase order for a batch of 100 units from Supplier Apex before Friday 4:00 PM IST to guarantee uninterrupted fulfillment.
+          </p>
+<!-- Velocity & Days Remaining Visual Pill -->
+<div class="md:ml-[54px] grid grid-cols-1 sm:grid-cols-3 gap-3">
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Units in Stock</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold">18 <span class="text-body-md font-normal text-secondary">units</span></span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Depletion Rate</span>
+<span class="font-headline-md text-headline-md text-amber-700 font-bold">2.4 / day</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Runout Horizon</span>
+<span class="font-headline-md text-headline-md text-error font-bold">7.5 Days</span>
+</div>
+</div>
+<!-- Metadata & Action -->
+<div class="md:ml-[54px] pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">SKU: SDK-4402 (ErgoPro v2)</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Apex Supplies Ltd</span>
+<span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-900 font-label-sm text-label-sm font-semibold">Safety threshold: 25 units</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-container text-secondary hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+                Adjust Safety Stock
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors shadow-xs" type="button">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span class="">Create Purchase Order</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 3: Opportunity Emerald Alert (Early Payment Discount) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col gap-4" data-category="revenue cost">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/30 text-tertiary font-bold flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">savings</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm uppercase font-bold text-tertiary bg-tertiary-fixed/40 px-2 py-0.5 rounded">Opportunity</span>
+<span class="text-secondary font-label-sm text-label-sm">• AP Yield Optimizer</span>
+<span class="text-tertiary font-label-sm text-label-sm font-semibold">Annualized ROI: 31.8%</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">
+                  Early payment discount available from SteelCraft
+                </h2>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary block">Net Instant Savings</span>
+<span class="font-metric-stat-sm text-metric-stat-sm text-tertiary font-bold tracking-tight">+₹18,400</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed pl-0 md:pl-[54px]">
+            SteelCraft invoice #INV-8821 (₹7,36,000 due July 22) qualifies for dynamic terms: 2.5% discount if settled on or before June 28. Your current cash balance (₹14.8L) comfortably covers working capital ratios.
+          </p>
+<div class="md:ml-[54px] p-3 rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-[20px]">verified</span>
+<span class="font-label-md text-label-md text-on-surface">Invoice #INV-8821 • ₹7,36,000 regular payable</span>
+</div>
+<span class="font-label-md text-label-md text-tertiary font-bold">Pay ₹7,17,600 by June 28</span>
+</div>
+<!-- Metadata & Action -->
+<div class="md:ml-[54px] pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Cash Flow Safe</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Vendor: SteelCraft Inc</span>
+<span class="px-2.5 py-1 rounded-md bg-tertiary-fixed/30 text-tertiary font-label-sm text-label-sm font-semibold">2.5% in 10 Net 30</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-container text-secondary hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+                Defer to Due Date
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-tertiary text-on-tertiary hover:bg-tertiary-container font-label-md text-label-md transition-colors shadow-xs" type="button">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+<span class="">Schedule Early Payment</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 4: Anomaly Detection Blue Alert (SaaS Subscriptions) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all flex flex-col gap-4" data-category="cost">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm uppercase font-bold text-secondary bg-surface-container-high px-2 py-0.5 rounded">Subscription Leakage</span>
+<span class="text-secondary font-label-sm text-label-sm">• Audit from Bank Feed</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">
+                  SaaS subscriptions increased 28% quarter-over-quarter
+                </h2>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary block">Monthly Recurring Savings</span>
+<span class="font-metric-stat-sm text-metric-stat-sm text-primary font-bold tracking-tight">₹12,800<span class="text-body-md font-normal text-secondary">/mo</span></span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed pl-0 md:pl-[54px]">
+            BizAI cross-referenced SSO identity logs with cloud billing. Detected 4 duplicate Figma Enterprise seats and 2 unassigned Adobe CC subscriptions active across marketing and product design teams without activity for 45+ days.
+          </p>
+<div class="md:ml-[54px] pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">4 Inactive Seats</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Software OpEx</span>
+<span class="px-2.5 py-1 rounded-md bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-medium">Figma &amp; Adobe CC</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-container text-secondary hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+                Ignore for 30d
+              </button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container-highest hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">manage_accounts</span>
+<span class="">Review Licenses</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- RIGHT COLUMN: Analytical Widgets & Health Benchmarks (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- BizAI Impact Score Card -->
+<div class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-secondary uppercase tracking-wider">BizAI Impact Score</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">info</span>
+</div>
+<div class="flex items-center gap-5">
+<!-- Radial SVG Gauge -->
+<div class="relative w-20 h-20 shrink-0">
+<svg class="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
+<path class="text-surface-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-metric-stat-sm text-metric-stat-sm font-bold text-on-surface">
+                88
+              </div>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1.5 text-tertiary font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+<span class="">+4 pts from last month</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">
+                Your enterprise is in the top 8% of efficient capital allocators in your cohort.
+              </p>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-secondary">Action completion fidelity</span>
+<span class="text-on-surface font-bold">92%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%;"></div>
+</div>
+</div>
+</div>
+<!-- Realized Financial Value Card -->
+<div class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-secondary uppercase tracking-wider">Savings Realized</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-tertiary bg-tertiary-fixed/30 font-label-sm text-label-sm font-bold">FY 24-25</span>
+</div>
+<div class="flex flex-col">
+<span class="font-metric-stat text-metric-stat text-on-surface font-bold tracking-tight">₹1.24L</span>
+<span class="font-body-md text-body-md text-secondary">Estimated monthly savings realized through proactive interventions</span>
+</div>
+<div class="flex flex-col gap-2 pt-2">
+<div class="flex items-center justify-between py-1.5 font-label-md text-label-md">
+<span class="flex items-center gap-2 text-secondary">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Freight route optimization
+              </span>
+<span class="font-semibold text-on-surface">₹48,200</span>
+</div>
+<div class="flex items-center justify-between py-1.5 font-label-md text-label-md">
+<span class="flex items-center gap-2 text-secondary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Early payment captures
+              </span>
+<span class="font-semibold text-on-surface">₹39,500</span>
+</div>
+<div class="flex items-center justify-between py-1.5 font-label-md text-label-md">
+<span class="flex items-center gap-2 text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> SaaS consolidation
+              </span>
+<span class="font-semibold text-on-surface">₹36,300</span>
+</div>
+</div>
+</div>
+<!-- Urgent Action Queue List -->
+<div class="bg-surface-container-lowest rounded-xl p-5 md:p-6 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-secondary uppercase tracking-wider">Pending Actions</span>
+<span class="w-5 h-5 rounded-full bg-error text-white font-label-sm text-label-sm flex items-center justify-center font-bold">3</span>
+</div>
+<a class="text-primary hover:text-primary-container font-label-sm text-label-sm font-semibold" href="#">View all</a>
+</div>
+<div class="flex flex-col gap-3">
+<div class="p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">priority_high</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">Sign Carrier SLA Amendment</span>
+<span class="font-label-sm text-label-sm text-secondary">Due by tomorrow, 12:00 PM</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:translate-x-0.5 transition-transform text-[18px]">chevron_right</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">Approve PO #2041 (ErgoPro Standing Desk v2)</span>
+<span class="font-label-sm text-label-sm text-secondary">Awaiting CFO sign-off</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:translate-x-0.5 transition-transform text-[18px]">chevron_right</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed/30 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface group-hover:text-primary transition-colors">Authorize SteelCraft wire transfer</span>
+<span class="font-label-sm text-label-sm text-secondary">Expires in 2 days</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:translate-x-0.5 transition-transform text-[18px]">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Copilot Mini Prompt Box -->
+<div class="rounded-xl p-5 bg-gradient-to-br from-surface-container to-surface-container-high flex flex-col gap-3 shadow-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">Ask Copilot about your numbers</span>
+</div>
+<p class="font-label-sm text-label-sm text-secondary">
+            Query anomaly thresholds, run hypothetical expense cuts, or generate vendor negotiation drafts in natural language.
+          </p>
+<div class="relative flex items-center">
+<input class="w-full h-10 pl-3 pr-9 rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" placeholder="e.g., Why did Delhi hub freight rise 34%?" type="text">
+<button aria-label="Send query" class="absolute right-2 text-primary hover:text-primary-container p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initInsightsPage() {
+    const filterButtons = document.querySelectorAll('.filter-chip');
+    const articles = document.querySelectorAll('article[data-category]');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'active-filter');
+          b.classList.add('bg-surface-container', 'text-on-surface');
+        });
+        btn.classList.add('bg-primary', 'text-on-primary', 'active-filter');
+        btn.classList.remove('bg-surface-container', 'text-on-surface');
+
+        const filter = btn.getAttribute('data-filter');
+        articles.forEach(art => {
+          if (filter === 'all') {
+            art.style.display = 'flex';
+          } else {
+            const categories = art.getAttribute('data-category').split(' ');
+            if (categories.includes(filter)) {
+              art.style.display = 'flex';
+            } else {
+              art.style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+  })();
+</script>
+</main>
+<!-- END: MainContent -->
+
+
+</body></html>

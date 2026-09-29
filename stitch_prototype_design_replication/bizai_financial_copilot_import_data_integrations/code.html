@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BizAI - Financial Copilot Dashboard</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            sidebar: '#0e1828',
+            'sidebar-active': '#1e293b',
+            'hero-teal': '#114a52',
+            'hero-dark': '#0b3238',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars-and-svg">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #f8fafc;
+    }
+    /* Concentric background glow effect for hero card */
+    .hero-bg-pattern {
+      background: radial-gradient(circle at 75% 50%, rgba(20, 93, 105, 0.4) 0%, transparent 60%),
+                  linear-gradient(135deg, #134e56 0%, #0c333a 100%);
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="min-h-screen flex bg-[#f8fafc] text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+<!-- BEGIN: Sidebar -->
+<aside class="w-[260px] bg-[#0e1828] text-slate-300 flex-shrink-0 flex flex-col justify-between border-r border-slate-800 z-20 min-h-screen" data-purpose="sidebar-navigation">
+<div class="p-5">
+<!-- Logo Branding -->
+<div class="flex items-center space-x-3 mb-8">
+<div class="w-9 h-9 rounded-lg bg-teal-500 flex items-center justify-center font-bold text-white text-xl shadow-md">
+          B
+        </div>
+<div>
+<div class="text-white font-bold text-lg leading-tight tracking-tight">BizAI</div>
+<div class="text-xs text-slate-400 font-normal">Financial copilot</div>
+</div>
+</div>
+<!-- Main Navigation Menu -->
+<nav class="space-y-1.5 font-medium text-sm">
+<!-- Dashboard (Active) -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg bg-[#1e293b] text-white font-semibold transition-colors" href="#">
+<svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="7" rx="1.5" stroke="currentColor" width="7" x="3" y="3"></rect>
+<rect height="7" rx="1.5" stroke="currentColor" width="7" x="14" y="3"></rect>
+<rect height="7" rx="1.5" stroke="currentColor" width="7" x="3" y="14"></rect>
+<rect height="7" rx="1.5" stroke="currentColor" width="7" x="14" y="14"></rect>
+</svg>
+<span>Dashboard</span>
+</a>
+<!-- AI Insights with Badge -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<div class="flex items-center space-x-3">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>AI Insights</span>
+</div>
+<span class="bg-[#d97706] text-white text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
+</a>
+<!-- Financial Analysis -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Financial Analysis</span>
+</a>
+<!-- Products -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Products</span>
+</a>
+<!-- Inventory -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="5" r="2.5" stroke="currentColor"></circle>
+<circle cx="6" cy="17" r="2.5" stroke="currentColor"></circle>
+<circle cx="18" cy="17" r="2.5" stroke="currentColor"></circle>
+<path d="M12 7.5v4m-3.5 2.5l-1.5 1m7-1l1.5 1" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Inventory</span>
+</a>
+<!-- Payments -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="14" rx="2" stroke="currentColor" width="20" x="2" y="5"></rect>
+<path d="M2 10h20M7 15h2" stroke-linecap="round"></path>
+</svg>
+<span>Payments</span>
+</a>
+<!-- Cash Flow -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Cash Flow</span>
+</a>
+<!-- Ask BizAI -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-5 pb-6 pt-4 space-y-4">
+<div class="space-y-1 text-sm border-b border-slate-800 pb-4">
+<!-- Import Data Link -->
+<a class="flex items-center space-x-3 px-3.5 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Import data</span>
+</a>
+<!-- Settings Link -->
+<a class="flex items-center space-x-3 px-3.5 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3" stroke="currentColor"></circle>
+<path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Settings</span>
+</a>
+</div>
+<!-- User Profile Card -->
+<div class="flex items-center justify-between pt-1 cursor-pointer group">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-full bg-slate-700/80 border border-slate-600 flex items-center justify-center font-bold text-xs text-white">
+            AR
+          </div>
+<div>
+<div class="text-sm font-semibold text-white leading-tight">Arjun Rao</div>
+<div class="text-xs text-slate-400">Rao &amp; Co. · Pro</div>
+</div>
+</div>
+<svg class="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto" data-purpose="main-layout-container"><div class="flex flex-col w-full">
+<!-- Top Command & Status Bar -->
+<div class="bg-surface-container-lowest px-8 py-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<nav class="flex items-center space-x-2 text-secondary font-label-md text-label-md">
+<span class="hover:text-primary transition-colors cursor-pointer">Workspace</span>
+<span>/</span>
+<span class="hover:text-primary transition-colors cursor-pointer">Data Pipeline</span>
+<span>/</span>
+<span class="text-on-surface font-semibold">Sources &amp; Ingestion</span>
+</nav>
+<div class="flex items-center gap-3">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Data Connections &amp; Import</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary-container/15 text-primary text-label-sm font-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Auto-Sync Active
+        </span>
+</div>
+</div>
+<!-- Quick Pipeline Controls -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex flex-col text-right pr-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Telemetry Baseline</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Synced 4m ago · 99.8% Healthy</span>
+</div>
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-body-md font-body-md transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-secondary text-[18px]">file_download</span>
+<span>Templates</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-body-md font-body-md font-semibold transition-all shadow-sm active:scale-95" id="syncAllBtn" type="button">
+<span class="material-symbols-outlined text-on-primary text-[18px]">sync</span>
+<span>Sync All Sources</span>
+</button>
+</div>
+</div>
+<!-- Main Grid Canvas -->
+<div class="px-8 py-8 space-y-8 max-w-[1600px] w-full mx-auto">
+<!-- Row 1: AI Engine Stats & Dropzone Asymmetric Mosaic -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+<!-- Ingestion Dropzone (7 Cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full pointer-events-none blur-2xl"></div>
+<div class="flex items-center justify-between mb-4">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">cloud_upload</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Universal File Ingestion Engine</h2>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-0.5">Automated entity mapping, OCR ledger normalization &amp; duplicate pruning.</p>
+</div>
+<span class="bg-surface-container-low text-secondary text-label-sm font-label-sm px-2.5 py-1 rounded-md">Max 250MB / batch</span>
+</div>
+<!-- Drop Box -->
+<div class="flex-1 min-h-[190px] rounded-xl bg-surface-container-low/60 hover:bg-surface-container-high/40 transition-colors p-6 flex flex-col items-center justify-center text-center cursor-pointer relative" id="dropZone">
+<input accept=".csv,.xlsx,.xls,.pdf,.xml,.json" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" id="fileInput" multiple="" type="file"/>
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">upload_file</span>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface text-base">
+            Drag statements &amp; ledgers here, or <span class="text-primary hover:underline font-semibold">browse files</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-1 max-w-md">
+            Compatible formats: <strong class="text-on-surface font-medium">CSV, XLSX, PDF, Tally XML, Zoho Invoices, JSON</strong>
+</p>
+</div>
+<!-- Preset Template Accelerators -->
+<div class="mt-4 pt-4 flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">bookmark_added</span>
+<span class="font-label-md text-label-md text-secondary font-medium">Standardized Schemas:</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface text-label-md font-label-md hover:bg-primary/10 hover:text-primary transition-colors" type="button">Bank Statement (MT940/CSV)</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface text-label-md font-label-md hover:bg-primary/10 hover:text-primary transition-colors" type="button">Sales &amp; Tax Ledger</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface text-label-md font-label-md hover:bg-primary/10 hover:text-primary transition-colors" type="button">Purchase Register</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface text-label-md font-label-md hover:bg-primary/10 hover:text-primary transition-colors" type="button">Inventory Stock Balance</button>
+</div>
+</div>
+</div>
+<!-- AI Data Normalization & Hygiene Assistant (5 Cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">BizAI Parser v4.2</h3>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">Active Model</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Autonomous schema mapping &amp; reconciliation auditor</p>
+</div>
+</div>
+<button class="text-secondary hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Metric Badges Group -->
+<div class="grid grid-cols-3 gap-3 my-5">
+<div class="bg-surface-container-low p-3.5 rounded-xl">
+<span class="font-label-sm text-label-sm text-secondary uppercase block mb-1">Field Accuracy</span>
+<div class="font-metric-stat-sm text-metric-stat-sm text-primary font-bold tabular-nums">99.8%</div>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +0.4% QoQ
+            </span>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-xl">
+<span class="font-label-sm text-label-sm text-secondary uppercase block mb-1">Conflicts</span>
+<div class="font-metric-stat-sm text-metric-stat-sm text-on-surface font-bold tabular-nums">0</div>
+<span class="font-label-sm text-label-sm text-tertiary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[12px]">check_circle</span> Clean slate
+            </span>
+</div>
+<div class="bg-surface-container-low p-3.5 rounded-xl">
+<span class="font-label-sm text-label-sm text-secondary uppercase block mb-1">Deduplication</span>
+<div class="font-metric-stat-sm text-metric-stat-sm text-on-surface font-bold tabular-nums">34</div>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+              Merged last 24h
+            </span>
+</div>
+</div>
+<!-- Visual Hygiene Indicator -->
+<div class="bg-surface-container-lowest rounded-lg p-3 bg-surface-container-low/40 mb-4">
+<div class="flex items-center justify-between text-label-md font-label-md mb-2">
+<span class="text-on-surface font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">verified_user</span>
+              Continuous Reconciliation Confidence
+            </span>
+<span class="text-primary font-bold">100%</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 100%"></div>
+</div>
+</div>
+<!-- Secondary Actions inside card -->
+<div class="flex items-center justify-between pt-1">
+<a class="font-label-md text-label-md text-primary hover:text-primary-container font-semibold flex items-center gap-1" href="#">
+            Data Mapping Settings
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+<span class="text-secondary font-label-sm text-label-sm">Rao &amp; Co. Tenant Policy: Strict</span>
+</div>
+</div>
+</div>
+<!-- Row 2: Live ERP & Banking Integrations Grid -->
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Integrated Accounting, ERP &amp; Banking Rails</h2>
+<p class="font-body-md text-body-md text-secondary">Real-time webhook and API listeners streaming transactions directly into the ledger.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">5 of 6 active</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<!-- Card 1: TallyPrime -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center font-bold text-on-surface text-lg">
+                  TP
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">TallyPrime Gateway</h3>
+<span class="font-label-sm text-label-sm text-secondary">XML Connector v9.1</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Connected
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Automated sync of Daybook, Voucher entries, Inventory valuation &amp; Ledgers every 15 minutes.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">Last heartbeat: 2m ago</span>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors" type="button">
+              Configure
+            </button>
+</div>
+</div>
+<!-- Card 2: Zoho Books -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center font-bold text-primary text-lg">
+                  ZB
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">Zoho Books</h3>
+<span class="font-label-sm text-label-sm text-secondary">REST OAuth2 Sync</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Connected
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Direct two-way synchronization for receivables, purchase invoices &amp; GST bill matching.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">Synced 12m ago</span>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors" type="button">
+              Configure
+            </button>
+</div>
+</div>
+<!-- Card 3: QuickBooks Online (Dormant/Connect) -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between opacity-95">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center font-bold text-secondary text-lg">
+                  QB
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">QuickBooks Online</h3>
+<span class="font-label-sm text-label-sm text-secondary">Global Multi-Entity</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-secondary font-label-sm text-label-sm font-semibold">
+                Offline
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Connect overseas subsidiaries and cross-border cash ledgers with automatic FX conversion.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">No credentials linked</span>
+<button class="px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold transition-colors shadow-sm" type="button">
+              Connect
+            </button>
+</div>
+</div>
+<!-- Card 4: ClearTax / GSTIN Portal -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center font-bold text-on-surface text-lg">
+                  GST
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">ClearTax / GST Portal</h3>
+<span class="font-label-sm text-label-sm text-secondary">GSP Bridge · 27AAACR1234F1Z5</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Auto-Recon Active
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Automated 2B vs Purchase register mismatch flagging, e-Invoice IRN ingestion &amp; e-Way tracking.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">2B fetched: Today, 06:00 AM</span>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors" type="button">
+              Configure
+            </button>
+</div>
+</div>
+<!-- Card 5: Razorpay & Stripe -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center font-bold text-primary text-lg">
+                  RP
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">Razorpay &amp; Stripe</h3>
+<span class="font-label-sm text-label-sm text-secondary">Payment Gateway Webhooks</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Connected
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Captures customer payments, refunds, gateway processing fees &amp; settlement batches instantly.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">Stream: 104 events today</span>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors" type="button">
+              Configure
+            </button>
+</div>
+</div>
+<!-- Card 6: Corporate Banking Webhooks -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center font-bold text-on-surface text-lg">
+                  CB
+                </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-base text-on-surface">ICICI &amp; HDFC Banking</h3>
+<span class="font-label-sm text-label-sm text-secondary">Host-to-Host Corporate API</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Live Feed
+              </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-3">
+              Direct intra-day statement pulls, balance inquiries and outgoing vendor remittance webhooks.
+            </p>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary">Encrypted mTLS active</span>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors" type="button">
+              Configure
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Ingestion Stream & Audit Log -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Audit Ledger &amp; Ingestion History</h2>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-secondary text-label-sm font-label-sm">Rao &amp; Co. Production</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Immutable trace of ingested files, payload hashes and normalization outcome.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined text-secondary absolute left-3 top-2.5 text-[18px]">search</span>
+<input class="pl-9 pr-4 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary focus:outline-none focus:bg-surface-container-lowest transition-all" placeholder="Filter batch or file..." type="text"/>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+<span>All Sources</span>
+</button>
+</div>
+</div>
+<!-- Audit Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-md text-body-md">
+<thead>
+<tr class="bg-surface-container-low text-secondary font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-6 font-semibold">Source</th>
+<th class="py-3 px-6 font-semibold">File / Stream Name</th>
+<th class="py-3 px-6 font-semibold">Ingested At</th>
+<th class="py-3 px-6 font-semibold">Records</th>
+<th class="py-3 px-6 font-semibold">Integrity Status</th>
+<th class="py-3 px-6 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface font-normal">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6 flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-medium text-on-surface">HDFC Bank Direct</span>
+</td>
+<td class="py-4 px-6 font-mono text-xs text-on-surface font-semibold">
+                HDFC_Bank_Statement_Jun2024.csv
+              </td>
+<td class="py-4 px-6 text-secondary font-label-md text-label-md">
+                Today, 09:42 AM
+              </td>
+<td class="py-4 px-6 font-semibold tabular-nums">
+                842 transactions
+              </td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                  Synced &amp; Cleared
+                </span>
+</td>
+<td class="py-4 px-6 text-right space-x-2">
+<button class="text-primary hover:text-primary-container font-label-md text-label-md font-semibold" type="button">View Log</button>
+<span class="text-secondary/40">·</span>
+<button class="text-secondary hover:text-on-surface font-label-md text-label-md font-semibold" type="button">Re-parse</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6 flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-medium text-on-surface">Zoho Books API</span>
+</td>
+<td class="py-4 px-6 font-mono text-xs text-on-surface font-semibold">
+                Zoho_Invoice_Ledger_Q1.xlsx
+              </td>
+<td class="py-4 px-6 text-secondary font-label-md text-label-md">
+                Today, 08:30 AM
+              </td>
+<td class="py-4 px-6 font-semibold tabular-nums">
+                1,482 records
+              </td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                  Reconciled
+                </span>
+</td>
+<td class="py-4 px-6 text-right space-x-2">
+<button class="text-primary hover:text-primary-container font-label-md text-label-md font-semibold" type="button">View Log</button>
+<span class="text-secondary/40">·</span>
+<button class="text-secondary hover:text-on-surface font-label-md text-label-md font-semibold" type="button">Audit Trail</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6 flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-medium text-on-surface">NIC / GST Portal</span>
+</td>
+<td class="py-4 px-6 font-mono text-xs text-on-surface font-semibold">
+                NIC_eWay_Bills_Jun.json
+              </td>
+<td class="py-4 px-6 text-secondary font-label-md text-label-md">
+                Yesterday, 11:15 PM
+              </td>
+<td class="py-4 px-6 font-semibold tabular-nums">
+                312 records
+              </td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                  Synced
+                </span>
+</td>
+<td class="py-4 px-6 text-right space-x-2">
+<button class="text-primary hover:text-primary-container font-label-md text-label-md font-semibold" type="button">View Log</button>
+<span class="text-secondary/40">·</span>
+<button class="text-secondary hover:text-on-surface font-label-md text-label-md font-semibold" type="button">Dispatch</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6 flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-medium text-on-surface">Manual Upload</span>
+</td>
+<td class="py-4 px-6 font-mono text-xs text-on-surface font-semibold">
+                Vendor_Discounts_Adhoc.csv
+              </td>
+<td class="py-4 px-6 text-secondary font-label-md text-label-md">
+                Yesterday, 04:12 PM
+              </td>
+<td class="py-4 px-6 font-semibold tabular-nums">
+                48 records
+              </td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                  2 Missing GSTINs
+                </span>
+</td>
+<td class="py-4 px-6 text-right space-x-2">
+<button class="text-error hover:underline font-label-md text-label-md font-semibold" type="button">Resolve (2)</button>
+<span class="text-secondary/40">·</span>
+<button class="text-secondary hover:text-on-surface font-label-md text-label-md font-semibold" type="button">Discard</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer -->
+<div class="px-6 py-4 bg-surface-container-low/30 flex items-center justify-between text-secondary font-label-md text-label-md">
+<span>Showing 4 of 42 historical data ingestion events</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface disabled:opacity-50" disabled="" type="button">Previous</button>
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface" type="button">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Inline Script for Upload Simulation and Feedback -->
+<script>
+    (function() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const syncBtn = document.getElementById('syncAllBtn');
+
+      if (dropZone && fileInput) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('bg-surface-container-highest');
+          }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('bg-surface-container-highest');
+          }, false);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+          if (fileInput.files.length > 0) {
+            const fileName = fileInput.files[0].name;
+            alert('File received: ' + fileName + '. BizAI Parser is mapping schema columns...');
+          }
+        });
+      }
+
+      if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+          const originalText = syncBtn.innerHTML;
+          syncBtn.innerHTML = '<span class="material-symbols-outlined text-on-primary text-[18px] animate-spin">refresh</span><span>Syncing Connectors...</span>';
+          syncBtn.disabled = true;
+
+          setTimeout(() => {
+            syncBtn.innerHTML = '<span class="material-symbols-outlined text-on-primary text-[18px]">done</span><span>All Sources Synced</span>';
+            setTimeout(() => {
+              syncBtn.innerHTML = originalText;
+              syncBtn.disabled = false;
+            }, 2500);
+          }, 1800);
+        });
+      }
+    })();
+  </script>
+</div></main>
+<!-- END: MainContent -->
+</body></html>

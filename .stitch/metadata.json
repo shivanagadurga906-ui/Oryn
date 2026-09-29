@@ -1,0 +1,104 @@
+{
+  "name": "projects/9286588496253357803",
+  "projectId": "9286588496253357803",
+  "title": "BizAI Financial Copilot",
+  "visibility": "PRIVATE",
+  "createTime": "2026-09-29T12:00:00.000000Z",
+  "updateTime": "2026-09-29T14:00:00.000000Z",
+  "projectType": "PROJECT_DESIGN",
+  "origin": "STITCH",
+  "deviceType": "DESKTOP",
+  "designTheme": {
+    "colorMode": "LIGHT",
+    "font": "INTER",
+    "roundness": "ROUND_EIGHT",
+    "customColor": "#0d9488",
+    "saturation": 3
+  },
+  "screens": {
+    "dashboard": {
+      "id": "bizai-dashboard-01",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-dashboard-01",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "ai_insights": {
+      "id": "bizai-insights-02",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-insights-02",
+      "x": 1500,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "financial_analysis": {
+      "id": "bizai-analysis-03",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-analysis-03",
+      "x": 3000,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "products": {
+      "id": "bizai-products-04",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-products-04",
+      "x": 4500,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "inventory": {
+      "id": "bizai-inventory-05",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-inventory-05",
+      "x": 6000,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "payments": {
+      "id": "bizai-payments-06",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-payments-06",
+      "x": 7500,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "cash_flow": {
+      "id": "bizai-cashflow-07",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-cashflow-07",
+      "x": 9000,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "ask_bizai": {
+      "id": "bizai-copilot-08",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-copilot-08",
+      "x": 10500,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "import_data": {
+      "id": "bizai-import-09",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-import-09",
+      "x": 12000,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    },
+    "settings": {
+      "id": "bizai-settings-10",
+      "sourceScreen": "projects/9286588496253357803/screens/bizai-settings-10",
+      "x": 13500,
+      "y": 0,
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "metadata": {
+    "userRole": "OWNER",
+    "projectKey": "9286588496253357803?pli=1"
+  }
+}

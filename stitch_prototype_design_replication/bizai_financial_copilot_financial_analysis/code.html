@@ -1,0 +1,790 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BizAI Financial Copilot</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "inverse-surface": "#213145",
+            "on-primary-fixed": "#00201d",
+            "surface-variant": "#d3e4fe",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-tint": "#006a61",
+            "surface-dim": "#cbdbf5",
+            "outline-variant": "#bcc9c6",
+            "on-primary-container": "#f4fffc",
+            "surface-container-highest": "#d3e4fe",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-container-high": "#dce9ff",
+            "on-secondary-container": "#5c647a",
+            "surface": "#f8f9ff",
+            "outline": "#6d7a77",
+            "secondary": "#565e74",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#6ffbbe",
+            "background": "#f8f9ff",
+            "inverse-primary": "#6bd8cb",
+            "tertiary": "#006947",
+            "primary": "#00685f",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-fixed-variant": "#005049",
+            "secondary-container": "#dae2fd",
+            "tertiary-container": "#00855b",
+            "primary-fixed": "#89f5e7",
+            "on-secondary-fixed": "#131b2e",
+            "primary-container": "#008378",
+            "surface-bright": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "on-secondary-fixed-variant": "#3f465c",
+            "on-background": "#0b1c30",
+            "on-tertiary-fixed": "#002113",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-secondary": "#ffffff",
+            "primary-fixed-dim": "#6bd8cb",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3d4947",
+            "on-error-container": "#93000a",
+            "on-surface": "#0b1c30",
+            "sidebar-dark": "#0e1828",
+            "sidebar-active": "#1e293b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.25rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "margin": "2rem",
+            "gutter-mobile": "0.75rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "metric-stat": ["Inter"],
+            "body-lg": ["Inter"],
+            "metric-stat-sm": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "headline-lg-mobile": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+            "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700"}],
+            "metric-stat": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+            "metric-stat-sm": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html {
+        overscroll-behavior: none;
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- BEGIN: Left Persistent Sidebar (260px) -->
+<aside class="fixed inset-y-0 left-0 w-[260px] bg-sidebar-dark z-30 flex flex-col justify-between border-r border-slate-800/80 shadow-sm">
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Logo Branding -->
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary font-headline-md flex items-center justify-center shadow-sm">
+          B
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-surface-container-lowest leading-tight tracking-tight">BizAI</span>
+<span class="font-label-sm text-label-sm text-slate-400 font-normal">Financial copilot</span>
+</div>
+</div>
+<!-- Main Navigation -->
+<nav class="flex flex-col gap-1.5 font-label-md text-label-md" data-active-classes="bg-sidebar-active text-surface-container-lowest font-semibold shadow-sm text-primary-fixed border-l-2 border-primary-fixed" data-purpose="sidebar-navigation">
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="dashboard" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="ai-insights" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+<span>AI Insights</span>
+</div>
+<span class="bg-amber-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<a aria-current="page" class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg transition-colors bg-sidebar-active text-surface-container-lowest font-semibold shadow-sm text-primary-fixed border-l-2 border-primary-fixed" data-path="financial-analysis" href="#">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+<span>Financial Analysis</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="products" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span>Products</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="inventory" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span>Inventory</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="payments" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span>Payments</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="cash-flow" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span>Cash Flow</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="ask-bizai" href="#">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+<span>Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-space-lg pb-space-lg pt-space-sm flex flex-col gap-space-md border-t border-slate-800/80">
+<div class="flex flex-col gap-1 font-label-md text-label-md text-slate-400">
+<a class="flex items-center gap-space-sm px-3.5 py-2 rounded-lg hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="import-data" href="#">
+<span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+<span>Import data</span>
+</a>
+<a class="flex items-center gap-space-sm px-3.5 py-2 rounded-lg hover:text-slate-100 hover:bg-slate-800/60 transition-colors" data-path="settings" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<!-- User Profile Card -->
+<div class="flex items-center justify-between pt-space-xs cursor-pointer group">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-xs text-surface-container-lowest">
+            AR
+          </div>
+<div class="flex flex-col">
+<div class="font-label-md text-label-md text-surface-container-lowest font-semibold leading-tight">Arjun Rao</div>
+<div class="font-label-sm text-label-sm text-slate-400">Rao &amp; Co. • Pro</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-slate-300 text-[18px] transition-colors">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- END: Left Persistent Sidebar -->
+<!-- BEGIN: Topbar Header -->
+<header class="fixed top-0 left-[260px] right-0 z-20 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container shadow-xs">
+<div class="h-16 px-space-lg flex items-center justify-between">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 font-label-md text-label-md">
+<span class="text-secondary hover:text-on-surface cursor-pointer transition-colors">Workspace</span>
+<span class="text-outline-variant font-light">/</span>
+<span class="text-on-surface font-semibold tracking-tight">Dashboard</span>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-space-md">
+<!-- Live System Status -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary-container"></span>
+</span>
+<span class="font-medium">Live sync</span>
+</div>
+<!-- Help Center -->
+<a class="flex items-center gap-1.5 text-secondary hover:text-on-surface font-label-md text-label-md transition-colors px-2 py-1.5 rounded-lg hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="hidden sm:inline">Help centre</span>
+</a>
+<!-- Profile AR Circle -->
+<button aria-label="User menu" class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant text-on-surface font-bold text-xs flex items-center justify-center hover:ring-2 hover:ring-primary/20 transition-all" type="button">
+          AR
+        </button>
+</div>
+</div>
+</header>
+<!-- END: Topbar Header -->
+<!-- BEGIN: MainContent -->
+<main class="pl-[260px] pt-16 min-h-screen bg-background" data-purpose="main-layout-container">
+<div class="flex flex-col w-full">
+<div class="p-space-lg max-w-[1560px] mx-auto w-full flex flex-col gap-space-lg">
+<!-- Hero Header Banner with Slate Gradient & Action Bar -->
+<div class="relative overflow-hidden rounded-xl bg-primary text-on-primary p-space-lg shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="relative z-10 flex flex-col gap-space-xs max-w-xl">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed bg-on-primary-fixed-variant/40 px-2 py-0.5 rounded-full inline-flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-fixed animate-pulse"></span>
+            Quarterly Audit Ready
+          </span>
+<span class="font-label-sm text-label-sm text-slate-300">Updated today, 09:42 IST</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-surface-container-lowest">
+          Financial Analysis
+        </h1>
+<p class="font-body-md text-body-md text-surface-container-high/90">
+          In-depth performance, P&amp;L breakdown, and predictive liquidity diagnostics across operating segments.
+        </p>
+</div>
+<!-- Controls & Quick Actions -->
+<div class="relative z-10 flex flex-wrap items-center gap-space-sm">
+<!-- Date Selector Pills -->
+<div class="flex items-center bg-slate-900/40 p-1 rounded-lg backdrop-blur-sm text-slate-200">
+<button class="px-3 py-1.5 text-xs font-semibold rounded-md bg-surface-container-lowest text-primary shadow-xs transition-all" type="button">
+            FY 2024-25 Q1
+          </button>
+<button class="px-3 py-1.5 text-xs font-medium rounded-md hover:text-white transition-colors" type="button">
+            Last 6 Months
+          </button>
+<button class="px-3 py-1.5 text-xs font-medium rounded-md hover:text-white transition-colors" type="button">
+            Custom
+          </button>
+</div>
+<!-- Industry Benchmark Toggle -->
+<button class="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900/30 hover:bg-slate-900/50 text-surface-container-lowest text-xs font-semibold transition-all" id="benchmarkToggle" type="button">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">domain_verification</span>
+<span>Benchmark vs Peer SMEs</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</button>
+<!-- Export Dropdown / Trigger -->
+<div class="relative group">
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-lowest text-on-surface text-xs font-semibold shadow-xs hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Export Report</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+<div class="hidden group-hover:flex flex-col absolute right-0 top-full mt-1 w-44 bg-surface-container-lowest text-on-surface rounded-lg shadow-xl p-1 z-20">
+<a class="flex items-center gap-2 px-3 py-2 rounded text-xs hover:bg-surface-container-low transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[16px] text-error">picture_as_pdf</span>
+<span>Executive Summary (PDF)</span>
+</a>
+<a class="flex items-center gap-2 px-3 py-2 rounded text-xs hover:bg-surface-container-low transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">table_chart</span>
+<span>Detailed Ledger (Excel)</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Subtle background radial glow -->
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-primary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+</div>
+<!-- Top 4 KPI Metrics Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Metric 1: Gross Revenue -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-xs flex flex-col justify-between gap-space-sm group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Gross Revenue</span>
+<div class="w-8 h-8 rounded-lg bg-primary-fixed/25 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-metric-stat text-metric-stat tracking-tight text-on-surface">₹24.80L</span>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-0.5 text-xs font-semibold text-tertiary px-1.5 py-0.5 rounded bg-tertiary-fixed/30">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+              +12.4%
+            </span>
+<span class="font-label-sm text-label-sm text-secondary">vs FY23 Q1 (₹22.06L)</span>
+</div>
+</div>
+</div>
+<!-- Metric 2: Net Profit -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-xs flex flex-col justify-between gap-space-sm group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Net Profit</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-metric-stat text-metric-stat tracking-tight text-on-surface">₹5.20L</span>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-0.5 text-xs font-semibold text-tertiary px-1.5 py-0.5 rounded bg-tertiary-fixed/30">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+              +8.1%
+            </span>
+<span class="font-label-sm text-label-sm text-secondary">vs previous quarter</span>
+</div>
+</div>
+</div>
+<!-- Metric 3: Operating Expense Ratio -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-xs flex flex-col justify-between gap-space-sm group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">OpEx Ratio</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-metric-stat text-metric-stat tracking-tight text-on-surface">64.2%</span>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-0.5 text-xs font-semibold text-primary px-1.5 py-0.5 rounded bg-surface-container-high">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+              -1.8%
+            </span>
+<span class="font-label-sm text-label-sm text-secondary">Optimization gains</span>
+</div>
+</div>
+</div>
+<!-- Metric 4: EBITDA Margin -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-xs flex flex-col justify-between gap-space-sm group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">EBITDA Margin</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-container/40 text-on-secondary-fixed-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">speed</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-metric-stat text-metric-stat tracking-tight text-on-surface">26.5%</span>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-0.5 text-xs font-semibold text-tertiary px-1.5 py-0.5 rounded bg-tertiary-fixed/30">
+<span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+              +2.3%
+            </span>
+<span class="font-label-sm text-label-sm text-secondary">Peer avg: 21.8%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Middle Section: Visualizer (2/3) + Expense Allocation (1/3) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg items-start">
+<!-- Left 2 Columns: Income Statement Visualizer / MoM P&L -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl p-space-lg shadow-xs flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Income Statement Dynamics</h2>
+<span class="font-label-sm text-label-sm bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-medium">Monthly Breakdown</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Comparative trajectory of Revenue, COGS, OpEx, and Net margin</p>
+</div>
+<!-- Chart Legend Pills -->
+<div class="flex flex-wrap items-center gap-3 font-label-sm text-label-sm text-secondary">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-primary"></span>
+<span>Revenue</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-surface-variant"></span>
+<span>COGS</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-secondary"></span>
+<span>OpEx</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-tertiary"></span>
+<span>Gross Profit %</span>
+</div>
+</div>
+</div>
+<!-- Inline High-Precision SVG Bar/Line Chart -->
+<div class="w-full h-80 relative flex flex-col justify-end pt-6">
+<svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 760 260">
+<!-- Grid Lines -->
+<line stroke="#eff4ff" stroke-dasharray="4,4" stroke-width="1" x1="40" x2="750" y1="20" y2="20"></line>
+<line stroke="#eff4ff" stroke-dasharray="4,4" stroke-width="1" x1="40" x2="750" y1="75" y2="75"></line>
+<line stroke="#eff4ff" stroke-dasharray="4,4" stroke-width="1" x1="40" x2="750" y1="130" y2="130"></line>
+<line stroke="#eff4ff" stroke-dasharray="4,4" stroke-width="1" x1="40" x2="750" y1="185" y2="185"></line>
+<line stroke="#eff4ff" stroke-width="1" x1="40" x2="750" y1="240" y2="240"></line>
+<!-- Y-Axis Labels -->
+<text class="fill-slate-400 text-[10px] font-medium" x="5" y="24">₹10L</text>
+<text class="fill-slate-400 text-[10px] font-medium" x="5" y="79">₹7.5L</text>
+<text class="fill-slate-400 text-[10px] font-medium" x="5" y="134">₹5.0L</text>
+<text class="fill-slate-400 text-[10px] font-medium" x="5" y="189">₹2.5L</text>
+<text class="fill-slate-400 text-[10px] font-medium" x="15" y="244">₹0</text>
+<!-- Grouped Bars per Month (Jan - Jun) -->
+<!-- Month 1: Jan -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="115" rx="3" width="22" x="75" y="125"></rect>
+<rect fill="#bec6e0" height="82" rx="3" width="22" x="100" y="158"></rect>
+<rect fill="#565e74" height="50" rx="3" width="22" x="125" y="190"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="111" y="256">Jan</text>
+</g>
+<!-- Month 2: Feb -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="122" rx="3" width="22" x="185" y="118"></rect>
+<rect fill="#bec6e0" height="88" rx="3" width="22" x="210" y="152"></rect>
+<rect fill="#565e74" height="55" rx="3" width="22" x="235" y="185"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="221" y="256">Feb</text>
+</g>
+<!-- Month 3: Mar -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="140" rx="3" width="22" x="295" y="100"></rect>
+<rect fill="#bec6e0" height="98" rx="3" width="22" x="320" y="142"></rect>
+<rect fill="#565e74" height="62" rx="3" width="22" x="345" y="178"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="331" y="256">Mar</text>
+</g>
+<!-- Month 4: Apr -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="155" rx="3" width="22" x="405" y="85"></rect>
+<rect fill="#bec6e0" height="108" rx="3" width="22" x="430" y="132"></rect>
+<rect fill="#565e74" height="68" rx="3" width="22" x="455" y="172"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="441" y="256">Apr</text>
+</g>
+<!-- Month 5: May -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="170" rx="3" width="22" x="515" y="70"></rect>
+<rect fill="#bec6e0" height="118" rx="3" width="22" x="540" y="122"></rect>
+<rect fill="#565e74" height="75" rx="3" width="22" x="565" y="165"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="551" y="256">May</text>
+</g>
+<!-- Month 6: Jun -->
+<g class="transition-all hover:opacity-90">
+<rect fill="#00685f" height="195" rx="3" width="22" x="625" y="45"></rect>
+<rect fill="#bec6e0" height="135" rx="3" width="22" x="650" y="105"></rect>
+<rect fill="#565e74" height="85" rx="3" width="22" x="675" y="155"></rect>
+<text class="fill-slate-500 text-[11px] font-medium" text-anchor="middle" x="661" y="256">Jun</text>
+</g>
+<!-- Trend Overlay Line for Gross Margin Path -->
+<path d="M 111 95 L 221 90 L 331 75 L 441 65 L 551 52 L 661 35" fill="none" stroke="#00855b" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="111" cy="95" fill="#ffffff" r="3.5" stroke="#00855b" stroke-width="2"></circle>
+<circle cx="221" cy="90" fill="#ffffff" r="3.5" stroke="#00855b" stroke-width="2"></circle>
+<circle cx="331" cy="75" fill="#ffffff" r="3.5" stroke="#00855b" stroke-width="2"></circle>
+<circle cx="441" cy="65" fill="#ffffff" r="3.5" stroke="#00855b" stroke-width="2"></circle>
+<circle cx="551" cy="52" fill="#ffffff" r="3.5" stroke="#00855b" stroke-width="2"></circle>
+<circle cx="661" cy="35" fill="#ffffff" r="4.5" stroke="#00855b" stroke-width="2.5"></circle>
+</svg>
+</div>
+<!-- Sub-ledger quick summaries -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm pt-space-xs border-t-0 bg-surface-container-low p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Jun Gross Profit</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">₹4.45L</span>
+<span class="text-[10px] text-tertiary">52.3% of revenue</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Jun Total COGS</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">₹4.05L</span>
+<span class="text-[10px] text-secondary">Wholesale supplies</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Jun Total OpEx</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">₹2.65L</span>
+<span class="text-[10px] text-secondary">Salaries + Warehousing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary">Q1 Net Run-rate</span>
+<span class="font-label-md text-label-md font-semibold text-primary">₹21.60L / yr</span>
+<span class="text-[10px] text-tertiary font-medium">On track for +14%</span>
+</div>
+</div>
+</div>
+<!-- Right 1 Column: Expense Category Allocation Donut -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs flex flex-col justify-between gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface">Expense Allocation</h2>
+<span class="font-label-sm text-label-sm text-secondary">Cumulative Q1 expenditure</span>
+</div>
+<button class="w-7 h-7 rounded-lg flex items-center justify-center text-secondary hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+<!-- Donut Visualizer via SVG with Center Metric -->
+<div class="relative flex items-center justify-center my-2">
+<svg class="w-48 h-48 -rotate-90 transform" viewBox="0 0 100 100">
+<!-- Background track -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#eff4ff" stroke-width="12"></circle>
+<!-- COGS: 48% (circumference ~ 238.76 -> 114.6) -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#00685f" stroke-dasharray="238.76" stroke-dashoffset="0" stroke-linecap="round" stroke-width="12"></circle>
+<!-- Salaries: 22% (52.5) -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#565e74" stroke-dasharray="238.76" stroke-dashoffset="124.15" stroke-linecap="round" stroke-width="12"></circle>
+<!-- Marketing: 15% (35.8) -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#008378" stroke-dasharray="238.76" stroke-dashoffset="176.68" stroke-linecap="round" stroke-width="12"></circle>
+<!-- Logistics: 10% (23.8) -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#bec6e0" stroke-dasharray="238.76" stroke-dashoffset="212.5" stroke-linecap="round" stroke-width="12"></circle>
+<!-- Software/Admin: 5% (11.9) -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#dce9ff" stroke-dasharray="238.76" stroke-dashoffset="236.37" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+<span class="font-label-sm text-label-sm text-secondary">Total OpEx</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">₹19.60L</span>
+<span class="font-label-sm text-label-sm text-tertiary">98.2% budgeted</span>
+</div>
+</div>
+<!-- Allocation Ledger Breakdown -->
+<div class="flex flex-col gap-2.5 pt-1">
+<div class="flex items-center justify-between text-xs py-1 hover:bg-surface-container-low px-2 rounded transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-medium text-on-surface">Cost of Goods Sold</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-secondary">₹9.40L</span>
+<span class="font-bold text-on-surface w-8 text-right">48%</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs py-1 hover:bg-surface-container-low px-2 rounded transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-medium text-on-surface">Salaries &amp; Talent</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-secondary">₹4.31L</span>
+<span class="font-bold text-on-surface w-8 text-right">22%</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs py-1 hover:bg-surface-container-low px-2 rounded transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-medium text-on-surface">Marketing &amp; CAC</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-secondary">₹2.94L</span>
+<span class="font-bold text-on-surface w-8 text-right">15%</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs py-1 hover:bg-surface-container-low px-2 rounded transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed-dim"></span>
+<span class="font-medium text-on-surface">Logistics &amp; Fulfillment</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-secondary">₹1.96L</span>
+<span class="font-bold text-on-surface w-8 text-right">10%</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs py-1 hover:bg-surface-container-low px-2 rounded transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-container-high"></span>
+<span class="font-medium text-on-surface">Software &amp; Admin</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-secondary">₹0.98L</span>
+<span class="font-bold text-on-surface w-8 text-right">5%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Comprehensive Financial Health Ratios & BizAI Copilot Note -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-space-lg items-stretch">
+<!-- Financial Health Ratios Ledger (2 cols on xl) -->
+<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl p-space-lg shadow-xs flex flex-col justify-between gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Financial Health &amp; Solvency Ratios</h2>
+<p class="font-body-md text-body-md text-secondary">Balance sheet health evaluated against Basel SME prudential liquidity norms.</p>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-tertiary-fixed/30 text-tertiary font-semibold flex items-center gap-1 self-start sm:self-auto">
+<span class="material-symbols-outlined text-[15px]">verified</span>
+            Audited Healthy
+          </span>
+</div>
+<!-- Ratios Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-md text-body-md">
+<thead>
+<tr class="text-secondary font-label-sm text-label-sm uppercase tracking-wider bg-surface-container-low rounded-lg">
+<th class="py-3 px-4 rounded-l-lg font-semibold">Diagnostic Ratio</th>
+<th class="py-3 px-4 font-semibold">Current Value</th>
+<th class="py-3 px-4 font-semibold">Recommended Target</th>
+<th class="py-3 px-4 font-semibold">MoM Trend</th>
+<th class="py-3 px-4 rounded-r-lg font-semibold text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Ratio 1: Current Ratio -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-4 font-medium text-on-surface flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-primary-fixed/30 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+</div>
+<div>
+<div class="font-semibold text-on-surface">Current Ratio</div>
+<div class="text-[11px] text-secondary">Liquidity of current assets vs obligations</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-bold text-on-surface">2.1x</td>
+<td class="py-3.5 px-4 text-secondary">&gt; 1.5x Benchmark</td>
+<td class="py-3.5 px-4">
+<span class="text-tertiary font-semibold text-xs inline-flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                    +0.2x
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary">
+                    Optimal
+                  </span>
+</td>
+</tr>
+<!-- Ratio 2: Quick Ratio -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-4 font-medium text-on-surface flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-surface-container text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+</div>
+<div>
+<div class="font-semibold text-on-surface">Quick Ratio (Acid Test)</div>
+<div class="text-[11px] text-secondary">Immediate cash liquidity excluding inventory</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-bold text-on-surface">1.4x</td>
+<td class="py-3.5 px-4 text-secondary">&gt; 1.0x Benchmark</td>
+<td class="py-3.5 px-4">
+<span class="text-tertiary font-semibold text-xs inline-flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                    +0.1x
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary">
+                    Strong
+                  </span>
+</td>
+</tr>
+<!-- Ratio 3: Accounts Receivable Days -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-4 font-medium text-on-surface flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-surface-container text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span>
+</div>
+<div>
+<div class="font-semibold text-on-surface">Accounts Receivable (DSO)</div>
+<div class="text-[11px] text-secondary">Average collection turnaround timeframe</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-bold text-on-surface">38 Days</td>
+<td class="py-3.5 px-4 text-secondary">&lt; 45 Days Target</td>
+<td class="py-3.5 px-4">
+<span class="text-tertiary font-semibold text-xs inline-flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                    -3 Days
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-surface-container text-on-surface">
+                    Healthy
+                  </span>
+</td>
+</tr>
+<!-- Ratio 4: Cash Conversion Cycle -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-4 font-medium text-on-surface flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-secondary-container/50 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">sync_alt</span>
+</div>
+<div>
+<div class="font-semibold text-on-surface">Cash Conversion Cycle (CCC)</div>
+<div class="text-[11px] text-secondary">Time required to convert outlay back into cash flow</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-bold text-on-surface">52 Days</td>
+<td class="py-3.5 px-4 text-secondary">&lt; 60 Days Target</td>
+<td class="py-3.5 px-4">
+<span class="text-tertiary font-semibold text-xs inline-flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                    -4 Days vs Q4
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary">
+                    Improving
+                  </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- BizAI Financial Copilot Note & Synthesis (1 col on xl) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs flex flex-col justify-between gap-space-md relative overflow-hidden">
+<!-- Subtle AI tint background gradient -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex flex-col gap-space-sm relative z-10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-primary text-on-primary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+</div>
+<span class="font-label-md text-label-md font-bold uppercase tracking-wider text-primary">Copilot Synthesis</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded">High Confidence</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low text-on-surface flex flex-col gap-2">
+<p class="font-body-md text-body-md font-semibold text-on-surface">
+              Operating efficiency in Q1 ranks in the top 15% of peer SMEs in retail &amp; hardware.
+            </p>
+<p class="font-body-md text-body-md text-secondary">
+              Receivables collection improved by 3 days following the implementation of automated payment reminders. Working capital runway stands robust at <span class="font-semibold text-on-surface">5.8 months</span>.
+            </p>
+</div>
+<!-- Suggested Strategic Action -->
+<div class="flex flex-col gap-2 pt-1">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-secondary">Suggested Capital Deployment</span>
+<div class="flex items-start gap-2.5 p-2 rounded bg-surface-bright hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">trending_up</span>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-on-surface">Reinvest ₹1.5L in fast-moving SKUs</span>
+<span class="text-[11px] text-secondary">Expected Gross Margin lift: +1.4% by August 2024</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Copilot Interactive Prompt Button -->
+<div class="pt-space-sm relative z-10">
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold shadow-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Query Copilot on P&amp;L Ratios</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Benchmark toggle feedback state
+  const benchmarkBtn = document.getElementById('benchmarkToggle');
+  if (benchmarkBtn) {
+    benchmarkBtn.addEventListener('click', function() {
+      const dot = this.querySelector('.bg-tertiary-fixed-dim, .bg-slate-500');
+      if (dot) {
+        if (dot.classList.contains('bg-tertiary-fixed-dim')) {
+          dot.classList.remove('bg-tertiary-fixed-dim');
+          dot.classList.add('bg-slate-500');
+          this.classList.add('opacity-70');
+        } else {
+          dot.classList.remove('bg-slate-500');
+          dot.classList.add('bg-tertiary-fixed-dim');
+          this.classList.remove('opacity-70');
+        }
+      }
+    });
+  }
+</script>
+</main>
+<!-- END: MainContent -->
+</body></html>

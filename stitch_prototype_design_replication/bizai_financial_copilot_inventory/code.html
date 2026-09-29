@@ -1,0 +1,872 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BizAI - Financial Copilot</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#dce9ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface-container-low": "#eff4ff",
+            "on-primary-fixed-variant": "#005049",
+            "on-tertiary-fixed-variant": "#005236",
+            "inverse-primary": "#6bd8cb",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-surface-variant": "#3d4947",
+            "tertiary-container": "#00855b",
+            "secondary-container": "#dae2fd",
+            "secondary-fixed-dim": "#bec6e0",
+            "on-background": "#0b1c30",
+            "error-container": "#ffdad6",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-surface": "#0b1c30",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "surface-bright": "#f8f9ff",
+            "background": "#f8f9ff",
+            "on-primary-fixed": "#00201d",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-variant": "#d3e4fe",
+            "surface-tint": "#006a61",
+            "inverse-on-surface": "#eaf1ff",
+            "primary": "#00685f",
+            "on-tertiary": "#ffffff",
+            "outline": "#6d7a77",
+            "surface-dim": "#cbdbf5",
+            "tertiary": "#006947",
+            "secondary-fixed": "#dae2fd",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#5c647a",
+            "primary-container": "#008378",
+            "inverse-surface": "#213145",
+            "on-tertiary-fixed": "#002113",
+            "outline-variant": "#bcc9c6",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-container": "#f4fffc",
+            "surface-container": "#e5eeff",
+            "secondary": "#565e74",
+            "on-error": "#ffffff",
+            "primary-fixed": "#89f5e7",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "2rem",
+            "space-xl": "2.25rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display-lg": ["Inter"],
+            "metric-stat": ["Inter"],
+            "metric-stat-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "metric-stat": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "metric-stat-sm": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        overscroll-behavior-y: none;
+      }
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- BEGIN: Left Sidebar Navigation -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-[#0e1828] text-slate-300 z-30 flex flex-col justify-between border-r border-slate-800/80" data-purpose="sidebar-navigation">
+<div class="flex flex-col flex-1 min-h-0">
+<!-- Logo & App Header -->
+<div class="h-16 flex items-center px-space-lg gap-space-sm border-b border-slate-800/60 bg-[#0b1322]">
+<div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center font-bold text-white font-headline-md shadow-sm">
+          B
+        </div>
+<div class="flex flex-col">
+<span class="text-white font-headline-md leading-tight tracking-tight text-sm font-bold">BizAI</span>
+<span class="font-label-sm text-[10px] text-teal-400 tracking-wider uppercase font-semibold">Financial Copilot</span>
+</div>
+</div>
+<!-- Main Navigation Menu -->
+<nav class="flex-1 px-space-sm py-space-md space-y-1 overflow-y-auto" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="nav-menu">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="dashboard" href="#">
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ai-insights" href="#">
+<span>AI Insights</span>
+<span class="bg-amber-600 text-white font-label-sm text-[10px] px-1.5 py-0.5 rounded-full font-bold leading-none">3</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="financial-analysis" href="#">
+<span>Financial Analysis</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="products" href="#">
+<span>Products</span>
+</a>
+<a aria-current="page" class="flex items-center justify-between px-3 py-2 rounded-lg transition-colors bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-path="inventory" href="#">
+<span>Inventory</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="payments" href="#">
+<span>Payments</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="cash-flow" href="#">
+<span>Cash Flow</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ask-bizai" href="#">
+<span>Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-space-sm pb-space-md pt-space-xs border-t border-slate-800/70 bg-[#0a111e]/60 space-y-2">
+<nav class="space-y-0.5" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="secondary-nav">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="import-data" href="#">
+<span>Import data</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="settings-profile" href="#">
+<span>Settings</span>
+</a>
+</nav>
+<!-- User Profile Card -->
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/60 transition-colors group text-left w-full block" data-path="settings-profile" href="#" title="View Profile &amp; Settings">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-xs text-white flex-shrink-0">
+            AR
+          </div>
+<div class="min-w-0 flex-1">
+<div class="text-xs font-semibold text-white leading-tight truncate">Arjun Rao</div>
+<div class="text-[11px] text-slate-400 truncate">Rao &amp; Co. • Pro</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold text-teal-400/90 group-hover:text-teal-300 pl-1">→</span>
+</a>
+</div>
+</aside>
+<!-- END: Left Sidebar Navigation -->
+<!-- Top Header Bar -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest border-b border-outline-variant/30 z-20 px-space-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-md text-secondary">Rao &amp; Co. Workspace</span>
+<span class="text-outline-variant">/</span>
+<span class="font-body-md font-semibold text-on-surface">BizAI Financial Intelligence</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+<span>Copilot Live • Synced</span>
+</div>
+<a class="text-xs text-secondary hover:text-primary transition-colors font-label-md px-2 py-1 rounded" href="#">
+        Help Centre
+      </a>
+<div class="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shadow-sm ring-2 ring-primary/20">
+        AR
+      </div>
+</div>
+</header>
+<!-- BEGIN: MainContent -->
+<main class="pl-64 pt-16 min-h-screen bg-surface flex flex-col" data-purpose="main-layout-container">
+<div class="flex flex-col w-full">
+<div class="p-space-lg lg:p-margin flex flex-col gap-space-lg">
+<!-- Top Strategic Banner -->
+<div class="rounded-xl bg-gradient-to-r from-primary to-primary-container p-space-lg lg:p-space-xl text-on-primary shadow-md relative overflow-hidden">
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-primary-fixed-dim/10 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="max-w-2xl">
+<div class="flex items-center gap-space-xs mb-space-xs">
+<span class="font-label-sm uppercase tracking-wider text-primary-fixed bg-on-primary-fixed-variant/40 px-2 py-0.5 rounded-full">Automated Supply Chain Ops</span>
+<span class="text-primary-fixed/60">•</span>
+<span class="font-label-sm text-primary-fixed">Real-Time Sync active</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg tracking-tight font-bold text-on-primary">Inventory &amp; Stock Intelligence</h1>
+<p class="font-body-md text-body-md text-on-primary-container/85 mt-1">
+            Monitor warehouse stock levels, days-of-inventory (DOI), reorder points, and automated stockout risk alerts across regional hubs.
+          </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="px-4 py-2 rounded-lg bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-on-primary font-label-md text-label-md transition-all flex items-center gap-1.5 backdrop-blur-sm" id="export-report-btn">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export Stock Report</span>
+</button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md shadow-sm hover:bg-surface-container-low transition-all flex items-center gap-1.5 font-semibold" id="generate-po-btn">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+<span>Generate PO</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 4 KPI Metric Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Card 1: Total Inventory Value -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Total Inventory Value</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface">₹3,20,450</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+            +4.2%
+          </span>
+<span class="font-label-sm text-label-sm text-secondary">vs last mo (₹3.07L)</span>
+</div>
+</div>
+<!-- Card 2: Stockout Risk Items -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Stockout Risk Items</span>
+<div class="w-8 h-8 rounded-lg bg-error-container/40 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+</div>
+<div class="my-space-sm flex items-baseline gap-2">
+<div class="font-metric-stat text-metric-stat text-error">2 SKUs</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">Action Needed</span>
+</div>
+<div class="font-label-sm text-label-sm text-secondary truncate" title="Standing Desk, Cable Spine">
+          Standing Desk, Cable Spine
+        </div>
+</div>
+<!-- Card 3: Average Turnover Rate -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Average Turnover Rate</span>
+<div class="w-8 h-8 rounded-lg bg-tertiary-fixed/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">published_with_changes</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface">4.8x <span class="font-label-md text-label-md text-secondary font-normal">/ yr</span></div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+            Healthy Band
+          </span>
+<span class="font-label-sm text-label-sm text-secondary">Optimal range 4.5x - 6.0x</span>
+</div>
+</div>
+<!-- Card 4: Holding Cost Rate -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary">Holding Cost Drag</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">toll</span>
+</div>
+</div>
+<div class="my-space-sm flex items-baseline gap-2">
+<div class="font-metric-stat text-metric-stat text-on-surface">14.2%</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface font-label-sm text-label-sm font-medium">Cost Ratio</span>
+</div>
+<div class="font-label-sm text-label-sm text-error font-medium">
+          Estimated ₹45,440/mo drag
+        </div>
+</div>
+</div>
+<!-- Filter and Search Toolbar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md">
+<div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm">
+<!-- Search Box -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px] pointer-events-none">search</span>
+<input class="w-full pl-10 pr-4 py-2 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-secondary focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 transition-all" id="inventory-search-input" placeholder="Search by SKU, item name, or location..." type="text">
+</div>
+<!-- Warehouse Filter -->
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-secondary whitespace-nowrap hidden lg:inline">Hub:</span>
+<select class="py-2 pl-3 pr-8 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest cursor-pointer" id="warehouse-filter">
+<option value="All">All Warehouses</option>
+<option value="Central Mumbai">Central Mumbai</option>
+<option value="Delhi Hub">Delhi Hub</option>
+<option value="South Regional">South Regional</option>
+</select>
+</div>
+<!-- Status Filter -->
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-secondary whitespace-nowrap hidden lg:inline">Status:</span>
+<select class="py-2 pl-3 pr-8 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest cursor-pointer" id="status-filter">
+<option value="All">All Statuses</option>
+<option value="Critical Risk">Critical Risk</option>
+<option value="Low Stock">Low Stock</option>
+<option value="Optimal">Optimal</option>
+</select>
+</div>
+</div>
+<!-- Sort Selection -->
+<div class="flex items-center gap-space-sm self-end md:self-auto">
+<span class="font-label-md text-label-md text-secondary whitespace-nowrap">Sort by:</span>
+<select class="py-2 pl-3 pr-8 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md font-semibold focus:outline-none cursor-pointer" id="sort-select">
+<option value="priority">Reorder Priority</option>
+<option value="doi">Days of Supply (Low to High)</option>
+<option value="units">Stock Units (Low to High)</option>
+<option value="value">Holding Cost (High to Low)</option>
+</select>
+</div>
+</div>
+<!-- Detailed Inventory Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left" id="inventory-table">
+<thead>
+<tr class="bg-surface-container-low text-secondary font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-space-md" scope="col">Product / SKU</th>
+<th class="py-3 px-space-md" scope="col">Warehouse</th>
+<th class="py-3 px-space-md text-right" scope="col">Current Stock</th>
+<th class="py-3 px-space-md text-right" scope="col">Reorder Pt</th>
+<th class="py-3 px-space-md min-w-[190px]" scope="col">Days of Supply</th>
+<th class="py-3 px-space-md text-right" scope="col">Unit Drag / mo</th>
+<th class="py-3 px-space-md text-center" scope="col">Status</th>
+<th class="py-3 px-space-md text-right" scope="col">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface font-body-md text-body-md" id="table-body">
+<!-- Row 1: ErgoPro Standing Desk v2 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors group" data-cost="850" data-doi="7.5" data-status="Critical Risk" data-units="18" data-warehouse="Central Mumbai">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-error-container/30 text-error flex items-center justify-center font-bold flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">desk</span>
+</div>
+<div>
+<div class="font-headline-md text-body-lg font-semibold text-on-surface leading-snug">ErgoPro Standing Desk v2</div>
+<div class="font-label-sm text-label-sm text-secondary font-mono">EP-DSK-01</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span>Central Mumbai</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-on-surface">18</span> <span class="font-label-sm text-secondary">units</span>
+</td>
+<td class="py-3.5 px-space-md text-right text-secondary font-mono">
+                25 units
+              </td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="font-bold text-error">7.5 Days left</span>
+<span class="text-secondary font-mono text-[10px]">Threshold: 14d</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 25%;"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right font-mono font-medium text-on-surface">
+                ₹850
+              </td>
+<td class="py-3.5 px-space-md text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-bold bg-error-container text-on-error-container">
+                  Critical Risk
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="action-btn px-3 py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm font-semibold transition-all shadow-sm flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>Auto PO #8492</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: AeroFlex Mesh Task Chair -->
+<tr class="hover:bg-surface-container-low/60 transition-colors group" data-cost="420" data-doi="48" data-status="Optimal" data-units="110" data-warehouse="Delhi Hub">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-tertiary-fixed/30 text-tertiary flex items-center justify-center font-bold flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+</div>
+<div>
+<div class="font-headline-md text-body-lg font-semibold text-on-surface leading-snug">AeroFlex Mesh Task Chair</div>
+<div class="font-label-sm text-label-sm text-secondary font-mono">AF-CHR-08</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span>Delhi Hub</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-on-surface">110</span> <span class="font-label-sm text-secondary">units</span>
+</td>
+<td class="py-3.5 px-space-md text-right text-secondary font-mono">
+                40 units
+              </td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="font-semibold text-tertiary">48.0 Days left</span>
+<span class="text-secondary font-mono text-[10px]">Healthy</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right font-mono font-medium text-on-surface">
+                ₹420
+              </td>
+<td class="py-3.5 px-space-md text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-container/15 text-tertiary">
+                  Optimal
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="action-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-medium transition-all flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span>Reorder</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Dual Monitor Aluminum Arm -->
+<tr class="hover:bg-surface-container-low/60 transition-colors group" data-cost="120" data-doi="22" data-status="Optimal" data-units="84" data-warehouse="Central Mumbai">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-primary flex items-center justify-center font-bold flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">desktop_windows</span>
+</div>
+<div>
+<div class="font-headline-md text-body-lg font-semibold text-on-surface leading-snug">Dual Monitor Aluminum Arm</div>
+<div class="font-label-sm text-label-sm text-secondary font-mono">DM-ARM-03</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span>Central Mumbai</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-on-surface">84</span> <span class="font-label-sm text-secondary">units</span>
+</td>
+<td class="py-3.5 px-space-md text-right text-secondary font-mono">
+                30 units
+              </td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="font-semibold text-tertiary">22.0 Days left</span>
+<span class="text-secondary font-mono text-[10px]">Healthy</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 58%;"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right font-mono font-medium text-on-surface">
+                ₹120
+              </td>
+<td class="py-3.5 px-space-md text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-container/15 text-tertiary">
+                  Optimal
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="action-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-medium transition-all flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span>Reorder</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Smart Cable Management Spine -->
+<tr class="hover:bg-surface-container-low/60 transition-colors group" data-cost="45" data-doi="4.9" data-status="Low Stock" data-units="14" data-warehouse="Delhi Hub">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-secondary-fixed-variant flex items-center justify-center font-bold flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">cable</span>
+</div>
+<div>
+<div class="font-headline-md text-body-lg font-semibold text-on-surface leading-snug">Smart Cable Management Spine</div>
+<div class="font-label-sm text-label-sm text-secondary font-mono">SC-SPN-12</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span>Delhi Hub</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-on-surface">14</span> <span class="font-label-sm text-secondary">units</span>
+</td>
+<td class="py-3.5 px-space-md text-right text-secondary font-mono">
+                20 units
+              </td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="font-bold text-amber-700">4.9 Days left</span>
+<span class="text-secondary font-mono text-[10px]">Threshold: 10d</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 28%;"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right font-mono font-medium text-on-surface">
+                ₹45
+              </td>
+<td class="py-3.5 px-space-md text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-amber-100 text-amber-900">
+                  Low Stock
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="action-btn px-3 py-1.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-label-sm text-label-sm font-medium transition-all shadow-sm flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+<span>Restock</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Under-Desk Walking Pad Pro -->
+<tr class="hover:bg-surface-container-low/60 transition-colors group" data-cost="1200" data-doi="11.2" data-status="Low Stock" data-units="6" data-warehouse="South Regional">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-secondary-fixed-variant flex items-center justify-center font-bold flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">directions_run</span>
+</div>
+<div>
+<div class="font-headline-md text-body-lg font-semibold text-on-surface leading-snug">Under-Desk Walking Pad Pro</div>
+<div class="font-label-sm text-label-sm text-secondary font-mono">WP-PRO-05</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span>South Regional</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-bold text-on-surface">6</span> <span class="font-label-sm text-secondary">units</span>
+</td>
+<td class="py-3.5 px-space-md text-right text-secondary font-mono">
+                15 units
+              </td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="font-bold text-amber-700">11.2 Days left</span>
+<span class="text-secondary font-mono text-[10px]">Threshold: 14d</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 36%;"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right font-mono font-medium text-on-surface">
+                ₹1,200
+              </td>
+<td class="py-3.5 px-space-md text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-amber-100 text-amber-900">
+                  Low Stock
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="action-btn px-3 py-1.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-label-sm text-label-sm font-medium transition-all shadow-sm flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+<span>Restock</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Inventory Meta summary -->
+<div class="p-space-md bg-surface-container-low/40 flex flex-col sm:flex-row items-center justify-between gap-space-sm text-secondary font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Showing 5 monitored SKUs across 3 primary fulfillment hubs</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span>Active DOI Horizon: <strong>60 Days</strong></span>
+<span class="text-outline-variant">•</span>
+<span>Safety Stock Target: <strong>14 Days</strong></span>
+</div>
+</div>
+</div>
+<!-- Bottom Intelligence & Warehouse Allocation Section (3 Columns Bento) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- Card 1: BizAI Stock Rebalancer -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-primary/5 pointer-events-none transition-transform group-hover:scale-125"></div>
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-md bg-primary text-on-primary flex items-center justify-center font-bold text-[11px]">AI</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">BizAI Stock Rebalancer</h3>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold">Zero Fee Option</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm mb-space-md">
+<div class="flex items-center justify-between text-secondary font-label-sm mb-1">
+<span>Origin: <strong>Delhi Hub</strong></span>
+<span class="material-symbols-outlined text-[14px] text-primary">arrow_forward</span>
+<span>Dest: <strong>Central Mumbai</strong></span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant font-normal">
+              Recommend dispatching <strong class="text-primary">35 units</strong> of task chairs/arms from Delhi Hub to Mumbai to prevent an imminent 7-day stockout without triggering expensive third-party expedited factory shipping.
+            </p>
+</div>
+<div class="flex items-center justify-between text-secondary font-label-sm text-label-sm mb-space-md">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary">savings</span>
+              Est. savings: ₹18,400 freight
+            </span>
+<span class="text-on-surface font-semibold">Transit: 36 hrs</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold transition-all shadow-sm flex items-center justify-center gap-2" id="execute-transfer-btn">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+<span>Execute Stock Transfer</span>
+</button>
+</div>
+<!-- Card 2: Supplier Lead Times & Reliability -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Supplier Reliability</h3>
+<span class="font-label-sm text-label-sm text-secondary">Q3 Assessment</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-space-md">
+            Realized vendor transit SLA performance and on-time fulfillment scores.
+          </p>
+<div class="space-y-space-sm">
+<!-- Apex Supplies Ltd -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-body-md font-semibold text-on-surface">Apex Supplies Ltd</span>
+<span class="font-label-sm text-label-sm font-bold text-tertiary bg-tertiary-container/15 px-2 py-0.5 rounded-full">96% On-Time</span>
+</div>
+<div class="flex items-center justify-between text-secondary font-label-sm text-label-sm">
+<span>Avg turnaround: <strong class="text-on-surface">5 Days</strong></span>
+<span class="text-[11px] text-tertiary font-medium">Fast SLA Tier</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 96%;"></div>
+</div>
+</div>
+<!-- SteelCraft Inc -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-body-md font-semibold text-on-surface">SteelCraft Inc</span>
+<span class="font-label-sm text-label-sm font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">88% On-Time</span>
+</div>
+<div class="flex items-center justify-between text-secondary font-label-sm text-label-sm">
+<span>Avg turnaround: <strong class="text-on-surface">12 Days</strong></span>
+<span class="text-[11px] text-amber-700 font-medium">Moderate Variance</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 88%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-secondary font-label-sm">
+<span>Benchmarked against 44 supplier POs</span>
+<a class="text-primary hover:underline font-semibold" href="#">View Vendors →</a>
+</div>
+</div>
+<!-- Card 3: Dead Capital Recovery -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-36 h-36 rounded-full bg-amber-500/5 pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Dead Capital Recovery</h3>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">Stagnant</span>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface">₹48,000</div>
+<div class="font-label-sm text-label-sm text-secondary">Identified dormant stock (&gt;90 days untouched)</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm my-space-sm">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary mt-0.5">lightbulb</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Old accessory batches (cables &amp; vintage monitor mounts) are accumulating storage charges. BizAI suggests a <strong class="text-on-surface font-semibold">20% discount clearance bundle</strong> to recoup ₹38,400 liquid cash immediately.
+              </p>
+</div>
+</div>
+</div>
+<div class="mt-space-md flex items-center gap-space-sm">
+<button class="flex-1 py-2.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md font-semibold transition-all flex items-center justify-center gap-1.5" id="launch-clearance-btn">
+<span class="material-symbols-outlined text-[16px]">local_offer</span>
+<span>Launch Clearance</span>
+</button>
+<button class="px-3 py-2.5 rounded-lg text-secondary hover:bg-surface-container font-label-md text-label-md transition-all" id="dismiss-capital-btn" title="Dismiss Alert">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initInventoryLogic() {
+    const searchInput = document.getElementById('inventory-search-input');
+    const warehouseFilter = document.getElementById('warehouse-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const sortSelect = document.getElementById('sort-select');
+    const tableBody = document.getElementById('table-body');
+
+    if (!tableBody) return;
+
+    function filterAndSortRows() {
+      const term = (searchInput?.value || '').toLowerCase().trim();
+      const warehouse = warehouseFilter?.value || 'All';
+      const status = statusFilter?.value || 'All';
+      const sortBy = sortSelect?.value || 'priority';
+
+      const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const rowWarehouse = row.getAttribute('data-warehouse') || '';
+        const rowStatus = row.getAttribute('data-status') || '';
+
+        const matchesTerm = !term || text.includes(term);
+        const matchesWarehouse = (warehouse === 'All') || (rowWarehouse === warehouse);
+        const matchesStatus = (status === 'All') || (rowStatus === status);
+
+        if (matchesTerm && matchesWarehouse && matchesStatus) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      // Sorting
+      const visibleRows = rows.filter(r => r.style.display !== 'none');
+      visibleRows.sort((a, b) => {
+        const doiA = parseFloat(a.getAttribute('data-doi') || '0');
+        const doiB = parseFloat(b.getAttribute('data-doi') || '0');
+        const unitsA = parseInt(a.getAttribute('data-units') || '0', 10);
+        const unitsB = parseInt(b.getAttribute('data-units') || '0', 10);
+        const costA = parseFloat(a.getAttribute('data-cost') || '0');
+        const costB = parseFloat(b.getAttribute('data-cost') || '0');
+
+        if (sortBy === 'priority' || sortBy === 'doi') {
+          return doiA - doiB; // Lowest days remaining first
+        } else if (sortBy === 'units') {
+          return unitsA - unitsB;
+        } else if (sortBy === 'value') {
+          return costB - costA; // Highest cost first
+        }
+        return 0;
+      });
+
+      visibleRows.forEach(row => tableBody.appendChild(row));
+    }
+
+    searchInput?.addEventListener('input', filterAndSortRows);
+    warehouseFilter?.addEventListener('change', filterAndSortRows);
+    statusFilter?.addEventListener('change', filterAndSortRows);
+    sortSelect?.addEventListener('change', filterAndSortRows);
+
+    // Interactive button state feedback
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const originalText = this.innerHTML;
+        this.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span><span>Processing...</span>';
+        this.disabled = true;
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-symbols-outlined text-[14px]">check</span><span>Dispatched</span>';
+          this.classList.remove('bg-primary', 'bg-primary-container');
+          this.classList.add('bg-tertiary-container', 'text-on-tertiary');
+        }, 800);
+      });
+    });
+
+    const executeBtn = document.getElementById('execute-transfer-btn');
+    if (executeBtn) {
+      executeBtn.addEventListener('click', function() {
+        const orig = this.innerHTML;
+        this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Initiating Transfer Manifest...</span>';
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-symbols-outlined text-[18px]">done_all</span><span>Manifest #TR-9942 Scheduled</span>';
+          this.classList.remove('bg-primary');
+          this.classList.add('bg-tertiary');
+        }, 1000);
+      });
+    }
+
+    const launchClearanceBtn = document.getElementById('launch-clearance-btn');
+    if (launchClearanceBtn) {
+      launchClearanceBtn.addEventListener('click', function() {
+        this.innerHTML = '<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span><span>Campaign Queued</span>';
+        this.disabled = true;
+      });
+    }
+
+    const exportBtn = document.getElementById('export-report-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', function() {
+        const orig = this.innerHTML;
+        this.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-bounce">downloading</span><span>Generating CSV...</span>';
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-symbols-outlined text-[18px]">file_download_done</span><span>Report Ready</span>';
+          setTimeout(() => { this.innerHTML = orig; }, 2500);
+        }, 1200);
+      });
+    }
+  })();
+</script>
+</main>
+<!-- END: MainContent -->
+</body></html>

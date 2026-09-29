@@ -1,0 +1,660 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BizAI - Financial Copilot</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#dce9ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface-container-low": "#eff4ff",
+            "on-primary-fixed-variant": "#005049",
+            "on-tertiary-fixed-variant": "#005236",
+            "inverse-primary": "#6bd8cb",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-surface-variant": "#3d4947",
+            "tertiary-container": "#00855b",
+            "secondary-container": "#dae2fd",
+            "secondary-fixed-dim": "#bec6e0",
+            "on-background": "#0b1c30",
+            "error-container": "#ffdad6",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-surface": "#0b1c30",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "surface-bright": "#f8f9ff",
+            "background": "#f8f9ff",
+            "on-primary-fixed": "#00201d",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-variant": "#d3e4fe",
+            "surface-tint": "#006a61",
+            "inverse-on-surface": "#eaf1ff",
+            "primary": "#00685f",
+            "on-tertiary": "#ffffff",
+            "outline": "#6d7a77",
+            "surface-dim": "#cbdbf5",
+            "tertiary": "#006947",
+            "secondary-fixed": "#dae2fd",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#5c647a",
+            "primary-container": "#008378",
+            "inverse-surface": "#213145",
+            "on-tertiary-fixed": "#002113",
+            "outline-variant": "#bcc9c6",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-container": "#f4fffc",
+            "surface-container": "#e5eeff",
+            "secondary": "#565e74",
+            "on-error": "#ffffff",
+            "primary-fixed": "#89f5e7",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "2rem",
+            "space-xl": "2.25rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display-lg": ["Inter"],
+            "metric-stat": ["Inter"],
+            "metric-stat-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "metric-stat": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "metric-stat-sm": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        overscroll-behavior-y: none;
+      }
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- BEGIN: Left Sidebar Navigation -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-[#0e1828] text-slate-300 z-30 flex flex-col justify-between border-r border-slate-800/80" data-purpose="sidebar-navigation">
+<div class="flex flex-col flex-1 min-h-0">
+<!-- Logo & App Header -->
+<div class="h-16 flex items-center px-space-lg gap-space-sm border-b border-slate-800/60 bg-[#0b1322]">
+<div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center font-bold text-white font-headline-md shadow-sm">
+          B
+        </div>
+<div class="flex flex-col">
+<span class="text-white font-headline-md leading-tight tracking-tight text-sm font-bold">BizAI</span>
+<span class="font-label-sm text-[10px] text-teal-400 tracking-wider uppercase font-semibold">Financial Copilot</span>
+</div>
+</div>
+<!-- Main Navigation Menu -->
+<nav class="flex-1 px-space-sm py-space-md space-y-1 overflow-y-auto" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="nav-menu">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="dashboard" href="#">
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ai-insights" href="#">
+<span>AI Insights</span>
+<span class="bg-amber-600 text-white font-label-sm text-[10px] px-1.5 py-0.5 rounded-full font-bold leading-none">3</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="financial-analysis" href="#">
+<span>Financial Analysis</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="products" href="#">
+<span>Products</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="inventory" href="#">
+<span>Inventory</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="payments" href="#">
+<span>Payments</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="cash-flow" href="#">
+<span>Cash Flow</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ask-bizai" href="#">
+<span>Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-space-sm pb-space-md pt-space-xs border-t border-slate-800/70 bg-[#0a111e]/60 space-y-2">
+<nav class="space-y-0.5" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="secondary-nav">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="import-data" href="#">
+<span>Import data</span>
+</a>
+<a aria-current="page" class="flex items-center justify-between px-3 py-2 rounded-lg transition-colors bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-path="settings-profile" href="#">
+<span>Settings</span>
+</a>
+</nav>
+<!-- User Profile Card -->
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/60 transition-colors group text-left w-full block" data-path="settings-profile" href="#" title="View Profile &amp; Settings">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-xs text-white flex-shrink-0">
+            AR
+          </div>
+<div class="min-w-0 flex-1">
+<div class="text-xs font-semibold text-white leading-tight truncate">Arjun Rao</div>
+<div class="text-[11px] text-slate-400 truncate">Rao &amp; Co. • Pro</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold text-teal-400/90 group-hover:text-teal-300 pl-1">→</span>
+</a>
+</div>
+</aside>
+<!-- END: Left Sidebar Navigation -->
+<!-- Top Header Bar -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest border-b border-outline-variant/30 z-20 px-space-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-md text-secondary">Rao &amp; Co. Workspace</span>
+<span class="text-outline-variant">/</span>
+<span class="font-body-md font-semibold text-on-surface">BizAI Financial Intelligence</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+<span>Copilot Live • Synced</span>
+</div>
+<a class="text-xs text-secondary hover:text-primary transition-colors font-label-md px-2 py-1 rounded" href="#">
+        Help Centre
+      </a>
+<div class="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shadow-sm ring-2 ring-primary/20">
+        AR
+      </div>
+</div>
+</header>
+<!-- BEGIN: MainContent -->
+<main class="pl-64 pt-16 min-h-screen bg-surface flex flex-col" data-purpose="main-layout-container">
+<div class="flex flex-col w-full">
+<!-- Top Header Banner -->
+<div class="relative bg-gradient-to-r from-primary to-primary-container text-on-primary px-space-xl py-space-xl overflow-hidden shadow-sm">
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-primary-fixed-dim/10 blur-3xl pointer-events-none"></div>
+<div class="absolute right-48 -bottom-20 w-64 h-64 rounded-full bg-tertiary-fixed/10 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-space-lg max-w-7xl mx-auto">
+<div class="space-y-space-xs max-w-3xl">
+<div class="flex items-center gap-space-xs font-label-sm uppercase tracking-wider text-primary-fixed">
+<span class="material-symbols-outlined text-base">domain_verification</span>
+<span>Enterprise Configuration Console</span>
+<span class="text-primary-fixed/40">•</span>
+<span class="text-primary-fixed">Entity ID: RAO-IND-9022</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-primary">
+          Workspace Settings &amp; Company Profile
+        </h1>
+<p class="font-body-md text-body-md text-on-primary-container max-w-2xl leading-relaxed">
+          Manage your business entity, team permissions, ERP &amp; banking integrations, and BizAI anomaly detection rules.
+        </p>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-on-primary font-label-md text-label-md transition-colors flex items-center gap-space-xs backdrop-blur-sm" type="button">
+<span class="material-symbols-outlined text-sm">history</span>
+<span>Audit Log</span>
+</button>
+<button class="px-space-lg py-2.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-bright font-label-md text-label-md font-semibold transition-all shadow-md flex items-center gap-space-xs group" id="save-btn" type="button">
+<span class="material-symbols-outlined text-base group-hover:scale-110 transition-transform">check_circle</span>
+<span id="save-btn-text">Save Changes</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Tab Bar Navigation (Under Header) -->
+<div class="bg-surface-container-lowest px-space-xl shadow-sm sticky top-16 z-10">
+<div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto">
+<nav aria-label="Settings Tabs" class="flex space-x-space-md py-1">
+<button class="flex items-center gap-space-xs py-3 px-space-sm font-label-md text-label-md text-primary font-bold relative group">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+<span>Company Profile</span>
+<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
+</button>
+<button class="flex items-center gap-space-xs py-3 px-space-sm font-label-md text-label-md text-secondary hover:text-on-surface transition-colors relative group">
+<span class="material-symbols-outlined text-base">hub</span>
+<span>Integrations &amp; Data Sources</span>
+<span class="bg-surface-container-high text-primary px-1.5 py-0.5 rounded-full font-label-sm text-label-sm">3 Live</span>
+</button>
+<button class="flex items-center gap-space-xs py-3 px-space-sm font-label-md text-label-md text-secondary hover:text-on-surface transition-colors relative group">
+<span class="material-symbols-outlined text-base">psychology</span>
+<span>AI Detection Rules</span>
+<span class="bg-tertiary-container/15 text-tertiary px-1.5 py-0.5 rounded-full font-label-sm text-label-sm">Autopilot</span>
+</button>
+<button class="flex items-center gap-space-xs py-3 px-space-sm font-label-md text-label-md text-secondary hover:text-on-surface transition-colors relative group">
+<span class="material-symbols-outlined text-base">group</span>
+<span>Team &amp; Access</span>
+</button>
+<button class="flex items-center gap-space-xs py-3 px-space-sm font-label-md text-label-md text-secondary hover:text-on-surface transition-colors relative group">
+<span class="material-symbols-outlined text-base">credit_card</span>
+<span>Billing &amp; Plan</span>
+</button>
+</nav>
+<div class="hidden lg:flex items-center gap-space-xs text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-xs text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span>Corporate Tier Verified</span>
+</div>
+</div>
+</div>
+<!-- Main Grid Content Area -->
+<div class="px-space-xl py-space-xl max-w-7xl mx-auto w-full">
+<!-- Notice Card -->
+<div class="mb-space-lg p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-xl">security_update_good</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface text-sm font-semibold">Statutory GSTIN Auto-Reconciliation Active</h2>
+<p class="font-body-md text-body-md text-secondary text-xs">Direct webhook enabled with the GSTN portal for 27AABCU9603R1ZM. Last reconciliation completed today at 09:14 AM IST.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-secondary hover:text-primary font-label-sm text-label-sm transition-colors shadow-sm" type="button">
+          Run Diagnostics
+        </button>
+</div>
+</div>
+<!-- 2-Column Responsive Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN: Company & Identity Details (7 Cols) -->
+<div class="lg:col-span-7 space-y-space-lg">
+<!-- Profile & Entity Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-lg">
+<div class="flex items-center justify-between pb-space-sm">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Corporate Master</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Legal Entity &amp; Business Profile</h2>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed/30 text-on-tertiary-fixed font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              Active Registered Entity
+            </span>
+</div>
+<!-- Logo Uploader Component -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row items-center gap-space-lg">
+<div class="relative group shrink-0">
+<div class="w-20 h-20 rounded-xl bg-gradient-to-br from-[#0e1828] to-[#1e293b] flex items-center justify-center text-on-primary font-bold text-2xl shadow-md overflow-hidden">
+<span class="text-primary-fixed font-display-lg">R&amp;C</span>
+</div>
+<button class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center shadow hover:bg-primary-container transition-colors" title="Change brand insignia" type="button">
+<span class="material-symbols-outlined text-xs">edit</span>
+</button>
+</div>
+<div class="flex-1 space-y-space-xs text-center sm:text-left">
+<div class="font-headline-md text-headline-md text-base text-on-surface font-semibold">Rao &amp; Co. Technologies Pvt Ltd</div>
+<p class="font-body-md text-body-md text-secondary text-xs">
+                Upload your vector mark or corporate seal (SVG, high-res PNG). This icon appears on client invoices and statutory reports.
+              </p>
+<div class="pt-1 flex flex-wrap items-center gap-space-sm justify-center sm:justify-start">
+<button class="px-3 py-1 rounded bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm hover:bg-surface-bright transition-colors" type="button">
+                  Upload Logo
+                </button>
+<button class="px-2 py-1 text-secondary hover:text-error font-label-sm text-label-sm transition-colors" type="button">
+                  Remove
+                </button>
+</div>
+</div>
+</div>
+<!-- Form Fields Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Legal Registered Name</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20" type="text" value="Rao &amp; Co. Technologies Pvt Ltd">
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Industry Classification</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20" type="text" value="Furniture &amp; Workspace Hardware">
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium flex items-center justify-between">
+<span>GSTIN (Goods &amp; Services Tax)</span>
+<span class="font-label-sm text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">verified</span> Live
+                </span>
+</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md tracking-wider uppercase font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20" type="text" value="27AABCU9603R1ZM">
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Permanent Account Number (PAN)</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md tracking-wider uppercase font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20" type="text" value="AABCU9603R">
+</div>
+<div class="sm:col-span-2 space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Corporate Headquarters Office</label>
+<textarea class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none" rows="2">Level 8, Platina Tower, G-Block, Bandra Kurla Complex (BKC), Mumbai, Maharashtra 400051</textarea>
+</div>
+</div>
+</div>
+<!-- Primary Admin Contact Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Account Governance</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Primary Administrative Contact</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">
+              Root Authority
+            </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Full Name</label>
+<div class="relative">
+<input class="w-full px-3 py-2 pl-9 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none" type="text" value="Arjun Rao">
+<span class="material-symbols-outlined text-secondary text-sm absolute left-2.5 top-2.5">person</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Corporate Role &amp; Title</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none" type="text" value="Chief Financial Officer (Owner)">
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">Authorized Email Address</label>
+<div class="relative">
+<input class="w-full px-3 py-2 pl-9 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none" type="email" value="arjun@raoco.in">
+<span class="material-symbols-outlined text-secondary text-sm absolute left-2.5 top-2.5">mail</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-secondary font-medium">2FA Mobile Contact</label>
+<div class="relative">
+<input class="w-full px-3 py-2 pl-9 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm focus:outline-none" type="text" value="+91 98201 44820">
+<span class="material-symbols-outlined text-secondary text-sm absolute left-2.5 top-2.5">phone_iphone</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Currency & Fiscal Year Preferences -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Accounting Conventions</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Currency &amp; Fiscal Calibration</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-1">
+<span class="font-label-sm text-label-sm text-secondary">Functional Currency</span>
+<div class="font-headline-md text-headline-md text-on-surface flex items-center gap-1 font-bold">
+<span>INR (₹)</span>
+<span class="font-label-sm text-label-sm font-normal text-secondary">Indian Rupee</span>
+</div>
+<p class="font-body-md text-body-md text-secondary text-xs">Default presentation currency for balance sheet</p>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-1">
+<span class="font-label-sm text-label-sm text-secondary">Fiscal Cycle</span>
+<div class="font-headline-md text-headline-md text-on-surface font-bold">
+                April – March
+              </div>
+<p class="font-body-md text-body-md text-secondary text-xs">Standard Indian statutory financial cycle</p>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-1">
+<span class="font-label-sm text-label-sm text-secondary">Tax Filing Regime</span>
+<div class="font-headline-md text-headline-md text-on-surface font-bold">
+                GST Monthly
+              </div>
+<p class="font-body-md text-body-md text-secondary text-xs">GSTR-1 &amp; GSTR-3B monthly reconciliation</p>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Copilot Intelligence & Automation (5 Cols) -->
+<div class="lg:col-span-5 space-y-space-lg">
+<!-- AI Autopilot Configuration Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md relative overflow-hidden">
+<div class="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-base">auto_awesome</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Algorithmic Ops</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">AI Autopilot Preferences</h2>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold">
+              Live Co-pilot
+            </span>
+</div>
+<p class="font-body-md text-body-md text-secondary text-xs leading-relaxed">
+            BizAI automatically inspects ledger entries, ledger drifts, and procurement signals to trigger pre-emptive workflows.
+          </p>
+<div class="space-y-space-md pt-2">
+<!-- Toggle Item 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-start justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-sm text-on-surface font-semibold">Autonomous Anomaly Alerts</span>
+<span class="font-label-sm text-label-sm bg-tertiary-fixed/30 text-on-tertiary-fixed px-1.5 py-0.2 rounded font-medium">Critical</span>
+</div>
+<p class="font-body-md text-body-md text-secondary text-xs">
+                  Alerts controller immediately when unit gross margin variance dips &gt; 1.5% against 30-day baseline.
+                </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-start justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-sm text-on-surface font-semibold">Automated WhatsApp Reminders</span>
+<span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-1.5 py-0.2 rounded font-medium">Dunning</span>
+</div>
+<p class="font-body-md text-body-md text-secondary text-xs">
+                  Sends automated courteous payment nudge on WhatsApp 3 days prior to invoice due date.
+                </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex items-start justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-sm text-on-surface font-semibold">Predictive PO Drafts</span>
+<span class="font-label-sm text-label-sm bg-tertiary-fixed/30 text-on-tertiary-fixed px-1.5 py-0.2 rounded font-medium">Procure</span>
+</div>
+<p class="font-body-md text-body-md text-secondary text-xs">
+                  Auto-compiles draft Purchase Orders with historical suppliers when stock runway drops &lt; 10 days.
+                </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Connected Financial Data Feeds Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Sync Pipeline</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Connected Data Feeds</h2>
+</div>
+<button class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5" type="button">
+<span>+ Add Gateway</span>
+</button>
+</div>
+<div class="space-y-space-sm">
+<!-- Feed 1: Banking -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-lg">account_balance</span>
+</div>
+<div class="min-w-0">
+<div class="font-headline-md text-headline-md text-sm text-on-surface font-semibold truncate">ICICI / HDFC Corporate Banking</div>
+<div class="font-body-md text-body-md text-secondary text-xs flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+<span>Live sync enabled • Continuous Webhook</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-tertiary-fixed/30 text-on-tertiary-fixed font-label-sm text-label-sm font-semibold shrink-0">
+                Connected
+              </span>
+</div>
+<!-- Feed 2: ERP -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-lg">inventory_2</span>
+</div>
+<div class="min-w-0">
+<div class="font-headline-md text-headline-md text-sm text-on-surface font-semibold truncate">Zoho Books &amp; Tally Prime ERP</div>
+<div class="font-body-md text-body-md text-secondary text-xs">
+                    Last synched 12 minutes ago • 1,482 records
+                  </div>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-tertiary-fixed/30 text-on-tertiary-fixed font-label-sm text-label-sm font-semibold shrink-0">
+                Connected
+              </span>
+</div>
+<!-- Feed 3: Tax / GSTIN -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</div>
+<div class="min-w-0">
+<div class="font-headline-md text-headline-md text-sm text-on-surface font-semibold truncate">E-Way Bill &amp; GSTIN Portal</div>
+<div class="font-body-md text-body-md text-secondary text-xs">
+                    NIC API v2.4 • Multi-branch linked
+                  </div>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-tertiary-fixed/30 text-on-tertiary-fixed font-label-sm text-label-sm font-semibold shrink-0">
+                Connected
+              </span>
+</div>
+</div>
+</div>
+<!-- Plan & Subscription Banner Card -->
+<div class="p-space-lg rounded-xl bg-gradient-to-br from-[#0e1828] to-[#1e293b] text-slate-100 shadow-md relative overflow-hidden">
+<div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4">
+<span class="material-symbols-outlined text-9xl text-white">token</span>
+</div>
+<div class="relative z-10 space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-0.5 rounded-full bg-teal-400/20 text-teal-300 font-label-sm text-label-sm font-bold tracking-wider uppercase">
+                Enterprise Active
+              </span>
+<span class="text-xs text-slate-400">Renews Oct 2025</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-white text-lg font-bold">BizAI Pro Enterprise</h3>
+<p class="font-body-md text-body-md text-slate-300 text-xs mt-1">
+                Full-spectrum autonomous financial modeling suite with high-throughput inference dedicated to Rao &amp; Co.
+              </p>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<div class="p-2.5 rounded-lg bg-white/5 space-y-0.5">
+<div class="font-label-sm text-slate-400 text-[10px] uppercase">Team Seats</div>
+<div class="font-headline-md text-white text-sm font-bold">8 / 12 Seats Used</div>
+</div>
+<div class="p-2.5 rounded-lg bg-white/5 space-y-0.5">
+<div class="font-label-sm text-slate-400 text-[10px] uppercase">Simulations</div>
+<div class="font-headline-md text-teal-300 text-sm font-bold">Unlimited Pro</div>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<span class="text-xs text-slate-400 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Priority inference node
+              </span>
+<button class="px-space-md py-1.5 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-label-md text-label-md font-bold transition-all shadow-sm" type="button">
+                Manage Subscription
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Toast Simulation -->
+<div class="fixed bottom-6 right-6 transform translate-y-24 opacity-0 transition-all duration-300 z-50 bg-slate-900 text-white px-space-lg py-space-md rounded-xl shadow-xl flex items-center gap-space-md" id="save-toast">
+<div class="w-7 h-7 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div>
+<div class="text-xs font-bold">Preferences Saved</div>
+<div class="text-[11px] text-slate-400">Corporate configuration has been synchronized to cloud cluster.</div>
+</div>
+</div>
+<script>
+    const saveBtn = document.getElementById('save-btn');
+    const saveBtnText = document.getElementById('save-btn-text');
+    const saveToast = document.getElementById('save-toast');
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        saveBtn.disabled = true;
+        saveBtnText.textContent = 'Saving...';
+        
+        setTimeout(() => {
+          saveBtn.disabled = false;
+          saveBtnText.textContent = 'Save Changes';
+          
+          if (saveToast) {
+            saveToast.classList.remove('translate-y-24', 'opacity-0');
+            saveToast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+              saveToast.classList.add('translate-y-24', 'opacity-0');
+              saveToast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+          }
+        }, 600);
+      });
+    }
+  </script>
+</div>
+</main>
+<!-- END: MainContent -->
+</body></html>

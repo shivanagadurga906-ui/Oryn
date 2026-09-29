@@ -1,0 +1,754 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BizAI - Financial Copilot</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#dce9ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#3f465c",
+            "surface-container-low": "#eff4ff",
+            "on-primary-fixed-variant": "#005049",
+            "on-tertiary-fixed-variant": "#005236",
+            "inverse-primary": "#6bd8cb",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-surface-variant": "#3d4947",
+            "tertiary-container": "#00855b",
+            "secondary-container": "#dae2fd",
+            "secondary-fixed-dim": "#bec6e0",
+            "on-background": "#0b1c30",
+            "error-container": "#ffdad6",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-surface": "#0b1c30",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "surface-bright": "#f8f9ff",
+            "background": "#f8f9ff",
+            "on-primary-fixed": "#00201d",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-variant": "#d3e4fe",
+            "surface-tint": "#006a61",
+            "inverse-on-surface": "#eaf1ff",
+            "primary": "#00685f",
+            "on-tertiary": "#ffffff",
+            "outline": "#6d7a77",
+            "surface-dim": "#cbdbf5",
+            "tertiary": "#006947",
+            "secondary-fixed": "#dae2fd",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#5c647a",
+            "primary-container": "#008378",
+            "inverse-surface": "#213145",
+            "on-tertiary-fixed": "#002113",
+            "outline-variant": "#bcc9c6",
+            "surface-container-highest": "#d3e4fe",
+            "on-tertiary-container": "#f5fff6",
+            "on-primary-container": "#f4fffc",
+            "surface-container": "#e5eeff",
+            "secondary": "#565e74",
+            "on-error": "#ffffff",
+            "primary-fixed": "#89f5e7",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "2rem",
+            "space-xl": "2.25rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "display-lg": ["Inter"],
+            "metric-stat": ["Inter"],
+            "metric-stat-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "metric-stat": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "metric-stat-sm": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        overscroll-behavior-y: none;
+      }
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- BEGIN: Left Sidebar Navigation -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-[#0e1828] text-slate-300 z-30 flex flex-col justify-between border-r border-slate-800/80" data-purpose="sidebar-navigation">
+<div class="flex flex-col flex-1 min-h-0">
+<!-- Logo & App Header -->
+<div class="h-16 flex items-center px-space-lg gap-space-sm border-b border-slate-800/60 bg-[#0b1322]">
+<div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center font-bold text-white font-headline-md shadow-sm">
+          B
+        </div>
+<div class="flex flex-col">
+<span class="text-white font-headline-md leading-tight tracking-tight text-sm font-bold">BizAI</span>
+<span class="font-label-sm text-[10px] text-teal-400 tracking-wider uppercase font-semibold">Financial Copilot</span>
+</div>
+</div>
+<!-- Main Navigation Menu -->
+<nav class="flex-1 px-space-sm py-space-md space-y-1 overflow-y-auto" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="nav-menu">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="dashboard" href="#">
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ai-insights" href="#">
+<span>AI Insights</span>
+<span class="bg-amber-600 text-white font-label-sm text-[10px] px-1.5 py-0.5 rounded-full font-bold leading-none">3</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="financial-analysis" href="#">
+<span>Financial Analysis</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="products" href="#">
+<span>Products</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="inventory" href="#">
+<span>Inventory</span>
+</a>
+<a aria-current="page" class="flex items-center justify-between px-3 py-2 rounded-lg transition-colors bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-path="payments" href="#">
+<span>Payments</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="cash-flow" href="#">
+<span>Cash Flow</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="ask-bizai" href="#">
+<span>Ask BizAI</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Section -->
+<div class="px-space-sm pb-space-md pt-space-xs border-t border-slate-800/70 bg-[#0a111e]/60 space-y-2">
+<nav class="space-y-0.5" data-active-classes="bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 pl-[10px]" data-purpose="secondary-nav">
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="import-data" href="#">
+<span>Import data</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 transition-colors font-body-md text-sm pl-3" data-path="settings-profile" href="#">
+<span>Settings</span>
+</a>
+</nav>
+<!-- User Profile Card -->
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-800/60 transition-colors group text-left w-full block" data-path="settings-profile" href="#" title="View Profile &amp; Settings">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center font-bold text-xs text-white flex-shrink-0">
+            AR
+          </div>
+<div class="min-w-0 flex-1">
+<div class="text-xs font-semibold text-white leading-tight truncate">Arjun Rao</div>
+<div class="text-[11px] text-slate-400 truncate">Rao &amp; Co. • Pro</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold text-teal-400/90 group-hover:text-teal-300 pl-1">→</span>
+</a>
+</div>
+</aside>
+<!-- END: Left Sidebar Navigation -->
+<!-- Top Header Bar -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest border-b border-outline-variant/30 z-20 px-space-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-md text-secondary">Rao &amp; Co. Workspace</span>
+<span class="text-outline-variant">/</span>
+<span class="font-body-md font-semibold text-on-surface">BizAI Financial Intelligence</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+<span>Copilot Live • Synced</span>
+</div>
+<a class="text-xs text-secondary hover:text-primary transition-colors font-label-md px-2 py-1 rounded" href="#">
+        Help Centre
+      </a>
+<div class="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shadow-sm ring-2 ring-primary/20">
+        AR
+      </div>
+</div>
+</header>
+<!-- BEGIN: MainContent -->
+<main class="pl-64 pt-16 min-h-screen bg-surface flex flex-col" data-purpose="main-layout-container">
+<div class="flex flex-col w-full">
+<div class="p-space-lg flex flex-col gap-space-lg">
+<!-- Top Header Banner: Deep Teal Fluid Card -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-primary-container p-space-lg text-on-primary shadow-md">
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-white/5 pointer-events-none blur-2xl"></div>
+<div class="absolute right-36 bottom-0 w-44 h-44 rounded-full bg-tertiary-fixed-dim/10 pointer-events-none blur-xl"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="max-w-2xl">
+<div class="flex items-center gap-space-xs mb-1.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/15 text-primary-fixed font-label-sm uppercase tracking-wider backdrop-blur-md">
+<span class="material-symbols-outlined text-xs">auto_awesome</span>
+              Autonomous Ledger Copilot
+            </span>
+<span class="text-white/40 text-xs">•</span>
+<span class="text-white/80 font-label-sm">RBI Compliant e-Invoicing Active</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg tracking-tight text-white font-bold">Payments &amp; Receivables</h1>
+<p class="font-body-md text-body-md text-white/85 mt-1 leading-relaxed">
+            Track inbound accounts receivable, vendor accounts payable, aging buckets, and automated reconciliation powered by BizAI risk telemetry.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap self-start md:self-center">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-label-md text-label-md transition-colors backdrop-blur-sm shadow-sm" type="button">
+<span class="material-symbols-outlined text-sm">sync</span>
+            Sync Bank Feed
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container-high font-label-md text-label-md font-semibold transition-all shadow-md" type="button">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+            New Invoice
+          </button>
+</div>
+</div>
+</div>
+<!-- 4 KPI Metric Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Total Outstanding AR</span>
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface tracking-tight font-bold">₹1.05L</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+            68% due in &lt;30 days
+          </span>
+<span class="text-secondary font-label-sm text-label-sm">Healthy velocity</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Overdue Payments</span>
+<div class="w-8 h-8 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-lg">crisis_alert</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-error tracking-tight font-bold">₹24,500</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+            3 invoices flagged
+          </span>
+<span class="text-secondary font-label-sm text-label-sm">Requires dunning</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Pending Accounts Payable</span>
+<div class="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined text-lg">outbox</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface tracking-tight font-bold">₹7.36L</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-label-sm font-semibold">
+            SteelCraft &amp; logistics due
+          </span>
+<span class="text-secondary font-label-sm text-label-sm">2.5% discount elig.</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider">Avg DSO (Collection Cycle)</span>
+<div class="w-8 h-8 rounded-full bg-tertiary-container/15 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-lg">speed</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-metric-stat text-metric-stat text-on-surface tracking-tight font-bold">38 Days</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+            ↓ 3 days vs peer avg
+          </span>
+<span class="text-secondary font-label-sm text-label-sm">Top quartile</span>
+</div>
+</div>
+</div>
+<!-- Main Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Top Action Bar with Tabs and Filters -->
+<div class="p-space-md flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest">
+<!-- Segmented Tabs -->
+<div class="inline-flex p-1 rounded-xl bg-surface-container-low max-w-fit">
+<button class="px-4 py-1.5 rounded-lg bg-surface-container-lowest text-primary shadow-sm font-label-md text-label-md font-semibold flex items-center gap-1.5" type="button">
+<span>Receivables (Invoices)</span>
+<span class="px-1.5 py-0.2 rounded-full bg-primary/10 text-primary font-label-sm text-[10px]">14</span>
+</button>
+<button class="px-4 py-1.5 rounded-lg text-secondary hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span>Payables (Vendor Bills)</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container text-secondary font-label-sm text-[10px]">6</span>
+</button>
+<button class="px-4 py-1.5 rounded-lg text-secondary hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span>Reconciliation Log</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</button>
+</div>
+<!-- Filter Controls -->
+<div class="flex items-center gap-2 flex-wrap">
+<div class="relative flex-1 sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-sm pointer-events-none">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-lg bg-surface-container-low text-on-surface placeholder:text-secondary font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Search client, vendor, or invoice #..." type="text">
+</div>
+<div class="relative">
+<select class="h-10 pl-3 pr-8 rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40">
+<option value="all">Status: All Ledgers</option>
+<option value="overdue">Overdue</option>
+<option value="due_soon">Due Soon</option>
+<option value="scheduled">Scheduled</option>
+<option value="reconciled">Reconciled</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-secondary text-sm pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<button class="h-10 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-sm text-secondary">calendar_today</span>
+<span>Jun 01 - Jun 30, 2024</span>
+<span class="material-symbols-outlined text-xs text-secondary">expand_more</span>
+</button>
+</div>
+<button class="h-10 px-3.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md font-semibold flex items-center gap-1.5 shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-sm">mark_email_read</span>
+<span>Send Batch Reminders</span>
+</button>
+</div>
+</div>
+<!-- Ledger Table -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-md text-body-md text-on-surface">
+<thead class="bg-surface-container-low font-label-sm text-label-sm text-secondary uppercase tracking-wider">
+<tr>
+<th class="py-3 px-space-md font-semibold" scope="col">Invoice / Bill ID</th>
+<th class="py-3 px-space-md font-semibold" scope="col">Entity Name</th>
+<th class="py-3 px-space-md font-semibold" scope="col">Issue Date</th>
+<th class="py-3 px-space-md font-semibold" scope="col">Due Date</th>
+<th class="py-3 px-space-md font-semibold text-right" scope="col">Amount (INR)</th>
+<th class="py-3 px-space-md font-semibold" scope="col">Payment Status</th>
+<th class="py-3 px-space-md font-semibold" scope="col">BizAI Risk Telemetry</th>
+<th class="py-3 px-space-md font-semibold text-right" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1: Horizon Tech Labs -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-sm">description</span>
+<span>INV-2024-089</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xs">
+                    HT
+                  </div>
+<div>
+<div class="font-semibold text-on-surface">Horizon Tech Labs</div>
+<div class="font-label-sm text-[11px] text-secondary">SaaS Enterprise Suite</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-secondary">10 Jun 2024</td>
+<td class="py-3.5 px-space-md">
+<span class="font-semibold text-amber-700">24 Jun 2024</span>
+<span class="block font-label-sm text-[11px] text-amber-600">Today</span>
+</td>
+<td class="py-3.5 px-space-md text-right font-semibold text-on-surface">₹45,000</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                  Due Today
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-surface-container/60 max-w-xs">
+<span class="material-symbols-outlined text-tertiary text-sm">verified_user</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant truncate" title="Low risk, repeat payer. Predicted settlement within 24h.">
+                    Low risk, repeat payer
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-high hover:bg-primary hover:text-white text-primary font-label-sm text-label-sm font-semibold transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-xs">chat</span>
+<span>Send Reminder</span>
+</button>
+<button class="p-1 rounded text-secondary hover:text-on-surface hover:bg-surface-container" title="Download Invoice" type="button">
+<span class="material-symbols-outlined text-sm">file_download</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Nexus Media Works (Overdue) -->
+<tr class="hover:bg-error-container/20 transition-colors group bg-error-container/5">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-error text-sm">warning</span>
+<span class="text-error font-bold">INV-2024-084</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-xs">
+                    NM
+                  </div>
+<div>
+<div class="font-semibold text-on-surface">Nexus Media Works</div>
+<div class="font-label-sm text-[11px] text-secondary">Digital Ad Campaign Retainer</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-secondary">28 May 2024</td>
+<td class="py-3.5 px-space-md">
+<span class="font-semibold text-error">12 Jun 2024</span>
+<span class="block font-label-sm text-[11px] text-error font-bold">+12 days late</span>
+</td>
+<td class="py-3.5 px-space-md text-right font-bold text-error">₹24,500</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error text-on-error font-label-sm text-label-sm font-semibold shadow-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                  Overdue 12d
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-error-container/40 max-w-xs">
+<span class="material-symbols-outlined text-error text-sm">report_problem</span>
+<span class="font-label-sm text-[11px] text-error font-medium truncate" title="High delinquency risk. Automated reminder sent x2 via WhatsApp. Escalation suggested.">
+                    High delinquency risk (Auto x2 sent)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-error text-on-error hover:bg-error/90 font-label-sm text-label-sm font-semibold transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-xs">send_and_archive</span>
+<span>Follow Up</span>
+</button>
+<button class="p-1 rounded text-secondary hover:text-on-surface hover:bg-surface-container" title="Download Invoice" type="button">
+<span class="material-symbols-outlined text-sm">file_download</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: SteelCraft Inc (AP Bill) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-sm">receipt</span>
+<span class="font-semibold text-on-surface">BILL-8821</span>
+<span class="font-label-sm text-[9px] px-1 rounded bg-secondary-container text-on-secondary-container">AP</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center font-bold text-xs">
+                    SC
+                  </div>
+<div>
+<div class="font-semibold text-on-surface">SteelCraft Inc</div>
+<div class="font-label-sm text-[11px] text-secondary">Raw Material Fabrications</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-secondary">01 Jun 2024</td>
+<td class="py-3.5 px-space-md">
+<span class="font-semibold text-on-surface">22 Jul 2024</span>
+<span class="block font-label-sm text-[11px] text-tertiary">28 days remaining</span>
+</td>
+<td class="py-3.5 px-space-md text-right font-semibold text-on-surface">₹7,36,000</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Scheduled
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-tertiary-fixed-dim/20 max-w-xs">
+<span class="material-symbols-outlined text-tertiary text-sm">savings</span>
+<span class="font-label-sm text-[11px] text-on-tertiary-fixed truncate" title="Eligible for 2.5% early settlement discount if paid by Jun 26. Save ₹18,400.">
+                    Eligible: 2.5% discount (Save ₹18,400)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-tertiary text-on-tertiary hover:bg-tertiary-container font-label-sm text-label-sm font-semibold transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-xs">bolt</span>
+<span>Pay Early</span>
+</button>
+<button class="p-1 rounded text-secondary hover:text-on-surface hover:bg-surface-container" title="Download Vendor Bill" type="button">
+<span class="material-symbols-outlined text-sm">file_download</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Zenith Retail Group -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-sm">description</span>
+<span>INV-2024-092</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-bold text-xs">
+                    ZR
+                  </div>
+<div>
+<div class="font-semibold text-on-surface">Zenith Retail Group</div>
+<div class="font-label-sm text-[11px] text-secondary">Point-of-Sale Integration</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-secondary">18 Jun 2024</td>
+<td class="py-3.5 px-space-md">
+<span class="font-semibold text-on-surface">02 Jul 2024</span>
+<span class="block font-label-sm text-[11px] text-secondary">8 days remaining</span>
+</td>
+<td class="py-3.5 px-space-md text-right font-semibold text-on-surface">₹35,500</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Pending
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-surface-container/60 max-w-xs">
+<span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant truncate" title="Standard Net-15 terms active. Customer credit rating AAA.">
+                    Standard net-15 terms (AAA)
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-semibold transition-all" type="button">
+<span class="material-symbols-outlined text-xs">visibility</span>
+<span>View</span>
+</button>
+<button class="p-1 rounded text-secondary hover:text-on-surface hover:bg-surface-container" title="Download Invoice" type="button">
+<span class="material-symbols-outlined text-sm">file_download</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer Bar -->
+<div class="p-space-sm px-space-md bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm text-secondary font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<span>Showing 4 of 20 total active ledgers</span>
+<span class="text-secondary/40">•</span>
+<span class="text-primary font-semibold">Auto-reconciliation run: 14m ago</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-secondary hover:text-on-surface transition-colors shadow-xs" disabled="" type="button">
+            Previous
+          </button>
+<span class="px-2 font-bold text-on-surface">1</span>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-secondary hover:text-on-surface transition-colors shadow-xs" type="button">
+            Next
+          </button>
+</div>
+</div>
+</div>
+<!-- Bottom Section: 2 Split Deep Analysis Cards -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Card: Aging Schedule Breakdown (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">stacked_bar_chart</span>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Aging Schedule Breakdown</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Weighted AR Risk Model</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-space-lg">
+            Cumulative receivables mapped by delinquency cohorts. ₹71,400 remains safely within standard net-30 terms.
+          </p>
+<!-- Horizontal Visual Segmented Bar -->
+<div class="w-full flex h-4 rounded-full overflow-hidden mb-space-md bg-surface-container">
+<div class="bg-primary hover:opacity-90 transition-opacity relative group cursor-pointer" style="width: 68%;" title="&lt;30 Days: ₹71,400 (68%)"></div>
+<div class="bg-primary-fixed-dim hover:opacity-90 transition-opacity relative group cursor-pointer" style="width: 21%;" title="31-60 Days: ₹22,100 (21%)"></div>
+<div class="bg-amber-400 hover:opacity-90 transition-opacity relative group cursor-pointer" style="width: 7%;" title="61-90 Days: ₹7,500 (7%)"></div>
+<div class="bg-error hover:opacity-90 transition-opacity relative group cursor-pointer" style="width: 4%;" title="90+ Days: ₹4,000 (4%)"></div>
+</div>
+<!-- Aging Bucket Grid Legend -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">&lt;30 Days</span>
+</div>
+<div class="font-metric-stat-sm text-metric-stat-sm font-bold text-on-surface">₹71,400</div>
+<div class="font-label-sm text-label-sm text-tertiary font-semibold mt-0.5">68% of Total</div>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-fixed-dim"></span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">31-60 Days</span>
+</div>
+<div class="font-metric-stat-sm text-metric-stat-sm font-bold text-on-surface">₹22,100</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-medium mt-0.5">21% of Total</div>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">61-90 Days</span>
+</div>
+<div class="font-metric-stat-sm text-metric-stat-sm font-bold text-amber-700">₹7,500</div>
+<div class="font-label-sm text-label-sm text-amber-600 font-semibold mt-0.5">7% of Total</div>
+</div>
+<div class="p-space-sm rounded-lg bg-error-container/20">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="font-label-sm text-label-sm text-error font-medium">90+ Days</span>
+</div>
+<div class="font-metric-stat-sm text-metric-stat-sm font-bold text-error">₹4,000</div>
+<div class="font-label-sm text-label-sm text-error font-bold mt-0.5">4% Critical</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-secondary font-label-md text-label-md">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-tertiary">check_circle</span>
+            AR Bad-Debt Provision currently calculated at 1.4% (Industry safe range: &lt;2.5%)
+          </span>
+<button class="text-primary hover:underline font-semibold" type="button">View Full Aging Matrix →</button>
+</div>
+</div>
+<!-- Right Card: BizAI Payment Autopilot Insights (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Payment Autopilot Insights</h2>
+<span class="font-label-sm text-label-sm text-primary font-semibold">BizAI Autonomous Copilot</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-bold">
+              2 Opportunities
+            </span>
+</div>
+<div class="space-y-space-sm mt-space-md">
+<!-- Insight 1: WhatsApp Payment Link -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-tertiary-container/20 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">mark_chat_unread</span>
+</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Automated WhatsApp Dunning Active</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-tertiary-container text-white font-bold">+18% Velocity</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Automated one-click UPI &amp; NetBanking payment links dispatched on T-3, T-0, and T+3 days have expedited cash collection across 14 MSME clients this billing cycle.
+              </p>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-secondary">Last batch sent today at 09:30 AM</span>
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm font-bold flex items-center gap-0.5" type="button">
+                  Configure Cadence
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Insight 2: Vendor Discount Opportunity -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col gap-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<span class="w-7 h-7 rounded-full bg-primary/20 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">currency_rupee</span>
+</span>
+<span class="font-body-md text-body-md font-bold text-on-surface">Dynamic Discounting Alert: SteelCraft</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-primary text-white font-bold">Save ₹18,400</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Early clearance of <span class="font-semibold text-on-surface">BILL-8821</span> prior to June 26 yields a 2.5% discount. Working capital cash reserves are presently sufficient (₹32.4L surplus).
+              </p>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-secondary">Expires in 48 hours</span>
+<button class="inline-flex items-center gap-1 px-3 py-1 rounded bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm font-semibold transition-colors shadow-xs" type="button">
+<span class="material-symbols-outlined text-xs">approval_delegation</span>
+                  Authorize Early Payout
+                </button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-secondary font-label-sm text-label-sm">
+<span>AI Audit Trail: SHA-256 Ledger Synchronized</span>
+<span class="text-primary font-medium hover:underline cursor-pointer">Security Protocol Details</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- END: MainContent -->
+</body></html>
